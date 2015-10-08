@@ -24,23 +24,23 @@
 			{
 				"name": "Design",
 				"icon": "icon-document-dashed-line",
-				"view": "views/documentTypes/views/design/design.html",
+				"view": "views/documenttypes/views/design/design.html",
 				"active": true
 			},
 			{
 				"name": "List view",
 				"icon": "icon-list",
-				"view": "views/documentTypes/views/listview/listview.html"
+				"view": "views/documenttypes/views/listview/listview.html"
 			},
 			{
 				"name": "Permissions",
 				"icon": "icon-keychain",
-				"view": "views/documentTypes/views/permissions/permissions.html"
+				"view": "views/documenttypes/views/permissions/permissions.html"
 			},
 			{
 				"name": "Templates",
 				"icon": "icon-layout",
-				"view": "views/documentTypes/views/templates/templates.html"
+				"view": "views/documenttypes/views/templates/templates.html"
 			}
 		];
 

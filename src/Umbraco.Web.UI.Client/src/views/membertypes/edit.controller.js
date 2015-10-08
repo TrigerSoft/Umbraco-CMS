@@ -18,8 +18,8 @@
 		vm.currentNode = null;
 		vm.contentType = {};
 		vm.page = {};
-      vm.page.loading = false;
-      vm.page.saveButtonState = "init";
+        vm.page.loading = false;
+        vm.page.saveButtonState = "init";
 		vm.page.navigation = [
 			{
 				"name": "Design",
