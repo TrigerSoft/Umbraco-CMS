@@ -24,7 +24,7 @@
 			{
 				"name": "Design",
 				"icon": "icon-document-dashed-line",
-				"view": "views/membertype/views/design/design.html",
+				"view": "views/membertypes/views/design/design.html",
 				"active": true
 			}
 		];
