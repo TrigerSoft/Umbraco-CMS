@@ -11,7 +11,7 @@ angular.module('umbraco.mocks').
               id: 0,
               locale: 'en-US',
               remainingAuthSeconds: 600,
-			  allowedSections: ["content", "media", "outputs"]
+			  allowedSections: ["content", "inputs", "outputs"]
           };
       }
 

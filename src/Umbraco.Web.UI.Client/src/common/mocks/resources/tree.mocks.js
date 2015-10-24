@@ -130,7 +130,7 @@ angular.module('umbraco.mocks').
                   };
 
                   break;
-              case "media":
+              case "inputs":
                   t = {
                       name: "inputs",
                       id: -1,
