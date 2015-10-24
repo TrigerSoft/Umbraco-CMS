@@ -1,6 +1,6 @@
 LazyLoad.js(
     [
-        'lib/jquery/jquery.js',
+        'lib/jquery/jquery.min.js',
         'lib/angular/1.1.5/angular.js',
         'lib/underscore/underscore-min.js',
 

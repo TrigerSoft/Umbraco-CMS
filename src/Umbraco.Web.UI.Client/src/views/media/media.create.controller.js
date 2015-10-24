@@ -8,6 +8,7 @@
  */
 function mediaCreateController($scope, $routeParams, mediaTypeResource, iconHelper) {
     
+    $scope.currentSection = $routeParams.section;
     mediaTypeResource.getAllowedTypes($scope.currentNode.id).then(function(data) {
         $scope.allowedTypes = iconHelper.formatContentTypeIcons(data);
     });

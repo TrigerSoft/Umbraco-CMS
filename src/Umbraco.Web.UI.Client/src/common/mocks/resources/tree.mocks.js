@@ -140,9 +140,34 @@ angular.module('umbraco.mocks').
                                   { name: "Event Hubs", childNodesUrl: "/debug/inputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
                                   { name: "Table Storage", childNodesUrl: "/debug/inputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
                                   { name: "Blob Storage", childNodesUrl: "/debug/inputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
-                                  //{ name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
-                                  //{ name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
-                                  //{ name: "random-name-" + section, childNodesUrl: url, id: 1237, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl }
+                              ], expanded: true, hasChildren: true, level: 1
+                          },
+                          {
+                              name: "Production", id: -3, icon: "", children: [
+                                  { name: "Event Hubs", childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
+                                  { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
+                                  { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
+                                  { name: "random-name-" + section, childNodesUrl: url, id: 1237, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl }
+                              ], expanded: false, hasChildren: true, level: 1
+                          }
+                      ],
+                      expanded: true,
+                      hasChildren: true,
+                      level: 0,
+                      //menuUrl: menuUrl,
+                      metaData: { treeAlias: "media" }
+                  };
+                  
+              case "outputs":
+                  t = {
+                      name: "outputs",
+                      id: -1,
+                      children: [
+                          {
+                              name: "Development", id: -2, parentId: -1, icon: "", children: [
+                                  { name: "Event Hubs", childNodesUrl: "/debug/inputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                  { name: "Table Storage", childNodesUrl: "/debug/inputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                  { name: "Blob Storage", childNodesUrl: "/debug/inputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
                               ], expanded: true, hasChildren: true, level: 1
                           },
                           {
