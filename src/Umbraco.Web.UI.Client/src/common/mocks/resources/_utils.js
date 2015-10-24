@@ -6,7 +6,8 @@ angular.module('umbraco.mocks').
         var doAuth = true;
 
         return {
-            
+            remoteBaseUrl: "http://localhost:39245/",
+            devInputs: "configuration/dev/inputs/",
             getMockDataType: function(id, selectedId) {
                 var dataType = {
                     id: id,
@@ -297,10 +298,10 @@ angular.module('umbraco.mocks').
             /** Checks for our mock auth cookie, if it's not there, returns false */
             checkAuth: function () {
                 if (doAuth) {
-                    var mockAuthCookie = $cookieStore.get("mockAuthCookie");
-                    if (!mockAuthCookie) {
-                        return false;
-                    }
+                    // var mockAuthCookie = $cookieStore.get("mockAuthCookie");
+                    // if (!mockAuthCookie) {
+                    //     return false;
+                    // }
                     return true;
                 }
                 else {

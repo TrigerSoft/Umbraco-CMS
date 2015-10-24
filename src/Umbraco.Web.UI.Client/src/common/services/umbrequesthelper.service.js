@@ -300,26 +300,26 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
                 // the request needs to include a 'boundary' parameter which identifies the boundary name between parts in this multi-part request
                 // and setting the Content-type manually will not set this boundary parameter. For whatever reason, setting the Content-type to 'false'
                 // will force the request to automatically populate the headers properly including the boundary parameter.
-                headers: { 'Content-Type': false },
-                transformRequest: function (data) {
-                    var formData = new FormData();
-                    //add the json data
-                    if (angular.isArray(data)) {
-                        _.each(data, function (item) {
-                            formData.append(item.key, !angular.isString(item.value) ? angular.toJson(item.value) : item.value);
-                        });
-                    }
-                    else {
-                        formData.append(data.key, !angular.isString(data.value) ? angular.toJson(data.value) : data.value);
-                    }
+                // headers: { 'Content-Type': false },
+                // transformRequest: function (data) {
+                //     var formData = new FormData();
+                //     //add the json data
+                //     if (angular.isArray(data)) {
+                //         _.each(data, function (item) {
+                //             formData.append(item.key, !angular.isString(item.value) ? angular.toJson(item.value) : item.value);
+                //         });
+                //     }
+                //     else {
+                //         formData.append(data.key, !angular.isString(data.value) ? angular.toJson(data.value) : data.value);
+                //     }
 
-                    //call the callback
-                    if (transformCallback) {
-                        transformCallback.apply(this, [data, formData]);
-                    }
+                //     //call the callback
+                //     if (transformCallback) {
+                //         transformCallback.apply(this, [data, formData]);
+                //     }
 
-                    return formData;
-                },
+                //     return formData;
+                // },
                 data: jsonData
             }).
             success(function (data, status, headers, config) {

@@ -1,14 +1,15 @@
 LazyLoad.js(
     [
-        'lib/jquery/jquery.min.js',
-        'lib/angular/1.1.5/angular.min.js',
+        'lib/jquery/jquery.js',
+        'lib/angular/1.1.5/angular.js',
         'lib/underscore/underscore-min.js',
 
         'lib/jquery-ui/jquery-ui.min.js',
 
         'lib/angular/1.1.5/angular-cookies.min.js',
         'lib/angular/1.1.5/angular-mobile.js',
-        'lib/angular/1.1.5/angular-sanitize.min.js',
+        'lib/angular/1.1.5/angular-sanitize.js',
+        'lib/angular/1.1.5/angular-mocks.js',
 
         'lib/angular/angular-ui-sortable.js',
 
@@ -21,7 +22,7 @@ LazyLoad.js(
         'lib/jquery-file-upload/jquery.fileupload-angular.js',
 
         'lib/bootstrap/js/bootstrap.2.3.2.min.js',
-        'lib/bootstrap-tabdrop/bootstrap-tabdrop.min.js',
+        'lib/bootstrap-tabdrop/bootstrap-tabdrop.js',
         'lib/umbraco/Extensions.js',
 
         'lib/umbraco/NamespaceManager.js',

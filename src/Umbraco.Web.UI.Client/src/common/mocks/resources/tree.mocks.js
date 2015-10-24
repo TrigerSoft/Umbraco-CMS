@@ -132,18 +132,32 @@ angular.module('umbraco.mocks').
                   break;
               case "media":
                   t = {
-                      name: "media",
+                      name: "inputs",
                       id: -1,
                       children: [
-                          { name: "random-name-" + section, childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
-                          { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
-                          { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
-                          { name: "random-name-" + section, childNodesUrl: url, id: 1237, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl }
+                          {
+                              name: "Development", id: -2, parentId: -1, icon: "", children: [
+                                  { name: "Event Hubs", childNodesUrl: "/debug/inputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                  { name: "Table Storage", childNodesUrl: "/debug/inputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                  { name: "Blob Storage", childNodesUrl: "/debug/inputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
+                                  //{ name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
+                                  //{ name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
+                                  //{ name: "random-name-" + section, childNodesUrl: url, id: 1237, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl }
+                              ], expanded: true, hasChildren: true, level: 1
+                          },
+                          {
+                              name: "Production", id: -3, icon: "", children: [
+                                  { name: "Event Hubs", childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
+                                  { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
+                                  { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
+                                  { name: "random-name-" + section, childNodesUrl: url, id: 1237, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl }
+                              ], expanded: false, hasChildren: true, level: 1
+                          }
                       ],
                       expanded: true,
                       hasChildren: true,
                       level: 0,
-                      menuUrl: menuUrl,
+                      //menuUrl: menuUrl,
                       metaData: { treeAlias: "media" }
                   };
 
@@ -225,6 +239,33 @@ angular.module('umbraco.mocks').
                  .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetChildren'))
                  .respond(returnChildren);
               
+              _.each(["EventHub", "BlobStorage", "TableStorage"], function (input) {
+
+                  $httpBackend
+                    .whenGET(mocksUtils.urlRegex('/debug/inputs/' + input))
+                    .respond(function () {
+
+                        return $.ajax({
+                            url: mocksUtils.remoteBaseUrl + mocksUtils.devInputs + input,
+                            dataType: 'json',
+                            type: 'GET'
+                        }).then(function (items) {
+                            var children = _.map(items, function (item) {
+                                return {
+                                    id: input + '_' + item.id,
+                                    name: item.name,
+                                    icon: "icon-document",
+                                    children: [],
+                                    expanded: false,
+                                    hasChildren: false,
+                                    level: 3
+                                };
+                            });
+
+                            return [200, children, null];
+                        });
+                    });
+              });
 
               $httpBackend
                  .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/DataTypeTree/GetNodes'))

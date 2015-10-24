@@ -954,9 +954,16 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
       return handleResponse;
 
       function handleResponse() {
+        var invokeCallback = function (response) {
+            xhr.$$respHeaders = response[2];
+            callback(response[0], response[1], xhr.getAllResponseHeaders());
+        }
+
         var response = wrapped.response(method, url, data, headers);
-        xhr.$$respHeaders = response[2];
-        callback(response[0], response[1], xhr.getAllResponseHeaders());
+        if (response instanceof Array)
+            invokeCallback(response);
+        else
+            response.then(invokeCallback);
       }
 
       function handleTimeout() {

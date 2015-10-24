@@ -40,7 +40,7 @@ angular.module("umbraco.directives")
             //'<ins ng-if="tree.enablelistviewsearch && node.metaData.isContainer" class="umb-tree-node-search icon-search" ng-click="searchNode(node, $event)" alt="searchAltText"></ins>' + 
             '<ins ng-class="{\'icon-navigation-right\': !node.expanded, \'icon-navigation-down\': node.expanded}" ng-click="load(node)"></ins>' +
             '<i class="icon umb-tree-icon sprTree"></i>' +
-            '<a ng-click="select(node, $event)"></a>' +
+            '<a ng-click="select(node, $event)" style="width:100%"></a>' +
             //NOTE: These are the 'option' elipses
             '<a class="umb-options" ng-click="options(node, $event)"><i></i><i></i><i></i></a>' +
             '<div ng-show="node.loading" class="l"><div></div></div>' +

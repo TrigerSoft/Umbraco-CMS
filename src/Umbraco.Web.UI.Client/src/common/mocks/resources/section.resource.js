@@ -15,9 +15,9 @@ function sectionMocks($httpBackend, mocksUtils) {
 
         var sections = [
             { name: "Content", cssclass: "icon-umb-content", alias: "content" },
-            { name: "Media", cssclass: "icon-umb-media", alias: "media" },
+            { name: "Inputs", cssclass: "icon-window-popin", alias: "media" },
             { name: "Settings", cssclass: "icon-umb-settings", alias: "settings" },
-            { name: "Developer", cssclass: "icon-umb-developer", alias: "developer" },
+            { name: "Developer", cssclass: "icon-out", alias: "developer" },
             { name: "Users", cssclass: "icon-umb-users", alias: "users" },
             { name: "Developer", cssclass: "icon-umb-developer", alias: "developer" },
             { name: "Users", cssclass: "icon-umb-users", alias: "users" }
