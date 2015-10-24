@@ -6,8 +6,7 @@ angular.module('umbraco.mocks').
         var doAuth = true;
 
         return {
-            remoteBaseUrl: "http://localhost:39245/",
-            devInputs: "configuration/dev/inputs/",
+            remoteBaseUrl: "http://localhost:39245/configuration/dev/",
             getMockDataType: function(id, selectedId) {
                 var dataType = {
                     id: id,

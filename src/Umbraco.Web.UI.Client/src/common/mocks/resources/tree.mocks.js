@@ -165,9 +165,9 @@ angular.module('umbraco.mocks').
                       children: [
                           {
                               name: "Development", id: -2, parentId: -1, icon: "", children: [
-                                  { name: "Event Hubs", childNodesUrl: "/debug/inputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                  { name: "Table Storage", childNodesUrl: "/debug/inputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                  { name: "Blob Storage", childNodesUrl: "/debug/inputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
+                                  { name: "Event Hubs", childNodesUrl: "/debug/outputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                  { name: "Table Storage", childNodesUrl: "/debug/outputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                  { name: "Blob Storage", childNodesUrl: "/debug/outputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
                               ], expanded: true, hasChildren: true, level: 1
                           },
                           {
@@ -266,12 +266,14 @@ angular.module('umbraco.mocks').
               
               _.each(["EventHub", "BlobStorage", "TableStorage"], function (input) {
 
+                _.each(["inputs", "outputs"], function (dir) {
+
                   $httpBackend
-                    .whenGET(mocksUtils.urlRegex('/debug/inputs/' + input))
+                    .whenGET(mocksUtils.urlRegex('/debug/' + dir + "/" + input))
                     .respond(function () {
 
                         return $.ajax({
-                            url: mocksUtils.remoteBaseUrl + mocksUtils.devInputs + input,
+                            url: mocksUtils.remoteBaseUrl + dir + "/" + input,
                             dataType: 'json',
                             type: 'GET'
                         }).then(function (items) {
@@ -290,6 +292,7 @@ angular.module('umbraco.mocks').
                             return [200, children, null];
                         });
                     });
+                 });
               });
 
               $httpBackend

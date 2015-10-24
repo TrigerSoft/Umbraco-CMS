@@ -4,7 +4,7 @@ angular.module('umbraco.mocks').
 
 		function factTypes(input) {
 			return $.ajax({
-				url: mocksUtils.remoteBaseUrl + mocksUtils.devInputs + input + "/factTypes",
+				url: mocksUtils.remoteBaseUrl + 'outputs/' + input + "/factTypes",
 				dataType: 'json',
 				type: 'GET'
 			}).then(function (factTypes) {
@@ -53,7 +53,7 @@ angular.module('umbraco.mocks').
 					path: "-1,-2,EventHub," + id,
 					tabs: [
 						{
-							label: "Event Hub Input Settings",
+							label: "Event Hub Output Settings",
 							alias: "tab0",
 							id: 0,
 							properties: [
@@ -120,7 +120,7 @@ angular.module('umbraco.mocks').
 					path: "-1,-2,TableStorage," + id,
 					tabs: [
 						{
-							label: "Table Storage Input Settings",
+							label: "Table Storage Output Settings",
 							alias: "tab0",
 							id: 0,
 							properties: [
@@ -207,6 +207,19 @@ angular.module('umbraco.mocks').
 									alias: "factType",
 									config: {
 										items: factTypes
+									}
+								},
+								{
+									label: 'Event Type Serialization Format',
+									description: "which serialization format (JSON, CSV) you are using",
+									value: properties.format && properties.format.format,
+									view: "dropdown",
+									alias: "serializationFormat",
+									config: {
+										items: {
+											"JSON": "JSON",
+											"CSV": "CSV"
+										}
 									}
 								}
 							]

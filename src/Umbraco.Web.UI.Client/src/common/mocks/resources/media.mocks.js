@@ -9,11 +9,12 @@ angular.module('umbraco.mocks').
       }
 
       var id = mocksUtils.getParameterByName(url, "id");
+      var section = $injector.get('$routeParams').section;
 
       var properties;
       if (id) {
         properties = $.ajax({
-          url: mocksUtils.remoteBaseUrl + mocksUtils.devInputs + id.replace(/_/g, '/'),
+          url: mocksUtils.remoteBaseUrl + section + "/" + id.replace(/_/g, '/'),
           dataType: 'json',
           type: 'GET'
         }).then(_.identity);
@@ -26,7 +27,6 @@ angular.module('umbraco.mocks').
         if (entity)
           inputType = entity.type;
 
-        var section = $injector.get('$routeParams').section;
         if (section === 'inputs') {
           return inputNodes.getNode(id, entity, inputType).then(function (node) {
             return [200, node, null];
@@ -48,15 +48,16 @@ angular.module('umbraco.mocks').
       }
 
       var parentId = mocksUtils.getParameterByName(data, "contentId");
-
+      var section = $injector.get('$routeParams').section;
+      var dir = section === 'inputs' ? 'Input' : 'Output'
       var types;
 
       if (parentId === "EventHub")
-        types = { name: "New Event Hub Input", description: "", alias: parentId, id: 1, icon: "icon-user", thumbnail: "icon-user" };
+        types = { name: "New Event Hub " + dir, description: "", alias: parentId, id: 1, icon: "icon-user", thumbnail: "icon-user" };
       else if (parentId === "TableStorage")
-        types = { name: "New Table Storage Input", description: "", alias: parentId, id: 1, icon: "icon-user", thumbnail: "icon-user" };
+        types = { name: "New Table Storage " + dir, description: "", alias: parentId, id: 1, icon: "icon-user", thumbnail: "icon-user" };
       else if (parentId === "BlobStorage")
-        types = { name: "New Blob Storage Input", description: "", alias: parentId, id: 1, icon: "icon-user", thumbnail: "icon-user" };
+        types = { name: "New Blob Storage " + dir, description: "", alias: parentId, id: 1, icon: "icon-user", thumbnail: "icon-user" };
       return [200, [types], null];
     }
 
@@ -122,6 +123,7 @@ angular.module('umbraco.mocks').
             var payLoad = angular.fromJson(data);
 
             var inputType = payLoad.value.parentId;
+            var section = $injector.get('$routeParams').section;
 
             var create = !payLoad.value.id;
 
@@ -144,7 +146,7 @@ angular.module('umbraco.mocks').
             });
 
             var type = create ? "POST" : "PUT";
-            var url = mocksUtils.remoteBaseUrl + mocksUtils.devInputs;
+            var url = mocksUtils.remoteBaseUrl + section + '/';
             url += create ? inputType : payLoad.value.id.replace(/_/g, '/');
 
             var ajax = {
@@ -161,7 +163,6 @@ angular.module('umbraco.mocks').
 
               id = create ? inputType + '_' + id : payLoad.value.id;
 
-              var section = $injector.get('$routeParams').section;
               if (section === 'inputs') {
                 return inputNodes.getNode(id, entity, inputType).then(function (node) {
                   return [200, node, null];

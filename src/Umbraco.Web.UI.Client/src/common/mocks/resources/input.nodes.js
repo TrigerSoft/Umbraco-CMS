@@ -4,7 +4,7 @@ angular.module('umbraco.mocks').
 
 		function factTypes(input) {
 			return $.ajax({
-				url: mocksUtils.remoteBaseUrl + mocksUtils.devInputs + input + "/factTypes",
+				url: mocksUtils.remoteBaseUrl + "inputs/" + input + "/factTypes",
 				dataType: 'json',
 				type: 'GET'
 			}).then(function (factTypes) {
@@ -20,7 +20,7 @@ angular.module('umbraco.mocks').
 
 		function entryPoints(input) {
 			return $.ajax({
-				url: mocksUtils.remoteBaseUrl + mocksUtils.devInputs + input + "/entryPoints",
+				url: mocksUtils.remoteBaseUrl + "inputs/" + input + "/entryPoints",
 				dataType: 'json',
 				type: 'GET'
 			}).then(function (entryPoints) {
