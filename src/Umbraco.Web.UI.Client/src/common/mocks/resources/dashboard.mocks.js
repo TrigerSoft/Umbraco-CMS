@@ -9,7 +9,15 @@ angular.module('umbraco.mocks').
           }
           else {
               //TODO: return real mocked data
-              return [200, [], null];
+              return [200, [{
+                  alias: "GetStarted",
+                  id: 1,
+                  label: "Get Started",
+                  properties: [{
+                      serverSide: false,
+                      path: "views/dashboard/default/test.html"
+                  }]
+              }], null];
           }
       }
 

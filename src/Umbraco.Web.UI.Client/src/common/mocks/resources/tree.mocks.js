@@ -74,10 +74,10 @@ angular.module('umbraco.mocks').
           }
           
           var children = [
-              { name: "Textstring", childNodesUrl: null, id: 10, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null },
-              { name: "Multiple textstring", childNodesUrl: null, id: 11, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null },
-              { name: "Yes/No", childNodesUrl: null, id: 12, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null },
-              { name: "Rich Text Editor", childNodesUrl: null, id: 13, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null }
+              { name: "Textstring", childNodesUrl: null, id: 10, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null, metaData: { treeAlias: "datatype" } },
+              { name: "Multiple textstring", childNodesUrl: null, id: 11, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null, metaData: { treeAlias: "datatype" } },
+              { name: "Yes/No", childNodesUrl: null, id: 12, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null, metaData: { treeAlias: "datatype" } },
+              { name: "Rich Text Editor", childNodesUrl: null, id: 13, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null, metaData: { treeAlias: "datatype" } }
           ];  
           
           return [200, children, null];
@@ -158,6 +158,7 @@ angular.module('umbraco.mocks').
                       metaData: { treeAlias: "media" }
                   };
                   
+                  break;
               case "outputs":
                   t = {
                       name: "outputs",
