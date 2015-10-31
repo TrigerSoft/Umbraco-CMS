@@ -21,7 +21,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['clean:pre', 'concat', 'recess:min', 'recess:installer', 'recess:canvasdesigner', 'bower-install-simple', 'bower', 'copy', 'clean:post']);
 
     //build-dev doesn't min - we are trying to speed this up and we don't want minified stuff when we are in dev mode
-    grunt.registerTask('build-dev', ['clean:pre', 'concat', 'recess:build', 'recess:installer', 'bower-install-simple', 'bower', 'copy']);
+    grunt.registerTask('build-dev', ['concat', 'recess:build', 'recess:installer', 'bower-install-simple', 'bower', 'sync']);
 
     //utillity tasks
     grunt.registerTask('docs', ['ngdocs']);
@@ -113,7 +113,7 @@ module.exports = function (grunt) {
             post: ['<%= distdir %>/js/*.dev.js']
         },
 
-        copy: {
+        sync: {
             assets: {
                 files: [{ dest: '<%= distdir %>/assets', src: '**', expand: true, cwd: 'src/assets/' }]
             },
@@ -498,6 +498,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-sync');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-recess');

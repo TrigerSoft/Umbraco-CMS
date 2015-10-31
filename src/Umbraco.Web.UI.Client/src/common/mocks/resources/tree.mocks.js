@@ -117,15 +117,18 @@ angular.module('umbraco.mocks').
                       name: "content",
                       id: -1,
                       children: [
-                          { name: "My website", id: 1234, childNodesUrl: url, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
-                          { name: "Components", id: 1235, childNodesUrl: url, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
-                          { name: "Archieve", id: 1236, childNodesUrl: url, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
-                          { name: "Recycle Bin", id: -20, childNodesUrl: url, icon: "icon-trash", routePath: section + "/recyclebin", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl }
+                          { 
+                            name: "Development", id: -2, parentId: -1, childNodesUrl: url, icon: "icon-home", children: [
+                              { name: "Models", childNodesUrl: "/debug/logic/models", id: "Models", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl },
+                              { name: "Rules", childNodesUrl: "/debug/logic/rules", id: "Rules", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl }
+                          ], expanded: true, hasChildren: true, level: 1 },
+                          { 
+                            name: "Production", id: -3, parentId: -1, childNodesUrl: url, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: 1 }
                       ],
                       expanded: true,
                       hasChildren: true,
                       level: 0,
-                      menuUrl: menuUrl,
+//                      menuUrl: menuUrl,
                       metaData: { treeAlias: "content" }
                   };
 
@@ -143,7 +146,7 @@ angular.module('umbraco.mocks').
                               ], expanded: true, hasChildren: true, level: 1
                           },
                           {
-                              name: "Production", id: -3, icon: "", children: [
+                              name: "Production", id: -3, parentId: -1, icon: "", children: [
                                   { name: "Event Hubs", childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
                                   { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
                                   { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
@@ -295,6 +298,35 @@ angular.module('umbraco.mocks').
                     });
                  });
               });
+              
+               _.each(["models", "rules"], function (logicType) {
+
+                  $httpBackend
+                    .whenGET(mocksUtils.urlRegex('/debug/logic/' + logicType))
+                    .respond(function () {
+
+                        return [200, [], null];
+                        // return $.ajax({
+                        //     url: mocksUtils.remoteBaseUrl + dir + "/" + input,
+                        //     dataType: 'json',
+                        //     type: 'GET'
+                        // }).then(function (items) {
+                        //     var children = _.map(items, function (item) {
+                        //         return {
+                        //             id: input + '_' + item.id,
+                        //             name: item.name,
+                        //             icon: "icon-document",
+                        //             children: [],
+                        //             expanded: false,
+                        //             hasChildren: false,
+                        //             level: 3
+                        //         };
+                        //     });
+
+                        //     return [200, children, null];
+                        // });
+                    });
+                 });
 
               $httpBackend
                  .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/DataTypeTree/GetNodes'))
