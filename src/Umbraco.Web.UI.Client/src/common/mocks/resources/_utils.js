@@ -43,23 +43,23 @@ angular.module('umbraco.mocks').
             getMockContent: function(id) {
                 var node = {
                     name: "My content with id: " + id,
-                    updateDate: new Date().toIsoDateTimeString(),
-                    publishDate: new Date().toIsoDateTimeString(),
-                    createDate: new Date().toIsoDateTimeString(),
+                    // updateDate: new Date(),
+                    // publishDate: new Date(),
+                    // createDate: new Date(),
                     id: id,
-                    parentId: 1234,
+                    parentId: "rules",
                     icon: "icon-umb-content",
                     owner: { name: "Administrator", id: 0 },
                     updater: { name: "Per Ploug Krogslund", id: 1 },
-                    path: "-1,1234,2455",
-                    allowedActions: ["U", "H", "A"],
+                    path: "-1,-2,rules" + id,
+                    // allowedActions: ["U", "H", "A"],
                     tabs: [
                     
                     {
-                        label: "Sample Editor",
-                        id: 3,
+                        label: "Edit Rule",
+                        id: 0,
                         properties: [
-                            { alias: "tags", hideLabel: true, view: "code", value: '' }
+                            { alias: "code", hideLabel: true, view: "code" }
                         ]
                     }
                    

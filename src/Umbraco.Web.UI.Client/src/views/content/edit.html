@@ -1,6 +1,8 @@
 ﻿<form novalidate name="contentForm"
       ng-controller="Umbraco.Editors.Content.EditController"
-      ng-show="loaded">
+      ng-submit="save()"
+      ng-show="loaded"
+      val-form-manager>
     <umb-panel>
         <umb-header tabs="content.tabs">
 
@@ -18,6 +20,21 @@
 
                         <umb-editor model="property"></umb-editor>
                     </umb-property>
+                    
+                    <div class="umb-tab-buttons" detect-fold ng-class="{'umb-dimmed': busy}">
+
+                        <div class="btn-group" ng-show="listViewPath">
+                            <a class="btn" href="#{{listViewPath}}">
+                                <localize key="buttons_returnToList">Return to list</localize>
+                            </a>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="submit" data-hotkey="ctrl+s" class="btn btn-success">
+                                <localize key="buttons_save">Save</localize>
+                            </button>
+                        </div>
+                    </div>
 
                 </div>
             </umb-tab>

@@ -627,9 +627,9 @@ function umbDataFormatter() {
             var propTemplate = _.find(genericTab.properties, function (item) {
                 return item.alias === "_umb_template";
             });
-            saveModel.expireDate = propExpireDate.value;
-            saveModel.releaseDate = propReleaseDate.value;
-            saveModel.templateAlias = propTemplate.value;
+            saveModel.expireDate = propExpireDate && propExpireDate.value;
+            saveModel.releaseDate = propReleaseDate && propReleaseDate.value;
+            saveModel.templateAlias = propTemplate && propTemplate.value;
 
             return saveModel;
         }

@@ -125,7 +125,7 @@ angular.module('umbraco.mocks').
             var inputType = payLoad.value.parentId;
             var section = $injector.get('$routeParams').section;
 
-            var create = !payLoad.value.id;
+            var create = payLoad.value.action === "saveNew";
 
             var entity = { name: payLoad.value.name };
             _.each(payLoad.value.properties, function (prop) {

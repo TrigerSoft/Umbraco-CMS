@@ -119,8 +119,8 @@ angular.module('umbraco.mocks').
                       children: [
                           { 
                             name: "Development", id: -2, parentId: -1, childNodesUrl: url, icon: "icon-home", children: [
-                              { name: "Models", childNodesUrl: "/debug/logic/models", id: "Models", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl },
-                              { name: "Rules", childNodesUrl: "/debug/logic/rules", id: "Rules", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl }
+                              { name: "Models", childNodesUrl: "/debug/logic/models", id: "models", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl },
+                              { name: "Rules", childNodesUrl: "/debug/logic/rules", id: "rules", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl }
                           ], expanded: true, hasChildren: true, level: 1 },
                           { 
                             name: "Production", id: -3, parentId: -1, childNodesUrl: url, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: 1 }
@@ -305,26 +305,25 @@ angular.module('umbraco.mocks').
                     .whenGET(mocksUtils.urlRegex('/debug/logic/' + logicType))
                     .respond(function () {
 
-                        return [200, [], null];
-                        // return $.ajax({
-                        //     url: mocksUtils.remoteBaseUrl + dir + "/" + input,
-                        //     dataType: 'json',
-                        //     type: 'GET'
-                        // }).then(function (items) {
-                        //     var children = _.map(items, function (item) {
-                        //         return {
-                        //             id: input + '_' + item.id,
-                        //             name: item.name,
-                        //             icon: "icon-document",
-                        //             children: [],
-                        //             expanded: false,
-                        //             hasChildren: false,
-                        //             level: 3
-                        //         };
-                        //     });
+                        return $.ajax({
+                            url: mocksUtils.remoteBaseUrl + "logic/" + logicType,
+                            dataType: 'json',
+                            type: 'GET'
+                        }).then(function (items) {
+                            var children = _.map(items, function (item) {
+                                return {
+                                    id: logicType + '_' + item.id,
+                                    name: item.name,
+                                    icon: "icon-document",
+                                    children: [],
+                                    expanded: false,
+                                    hasChildren: false,
+                                    level: 3
+                                };
+                            });
 
-                        //     return [200, children, null];
-                        // });
+                            return [200, children, null];
+                        });
                     });
                  });
 

@@ -4,8 +4,8 @@
  * @function
  */
 function ContentEditController($scope, $routeParams, $location, $q, $window, appState, contentResource, entityResource, navigationService, notificationsService, angularHelper, serverValidationManager, contentEditingHelper, fileManager, formHelper, umbModelMapper, editorState, localizationService, umbRequestHelper, $http) {
-    
-     function init(content) {
+
+    function init(content) {
 
         var buttons = contentEditingHelper.configureContentEditorButtons({
             create: $routeParams.create,
@@ -26,9 +26,9 @@ function ContentEditController($scope, $routeParams, $location, $q, $window, app
         if (!$routeParams.create) {
             if (content.parentId && content.parentId != -1) {
                 entityResource.getAncestors(content.id, "document")
-               .then(function (anc) {
-                   $scope.ancestors = anc;
-               });
+                    .then(function (anc) {
+                        $scope.ancestors = anc;
+                    });
             }
         }
     }
@@ -55,7 +55,7 @@ function ContentEditController($scope, $routeParams, $location, $q, $window, app
                 });
         }
     }
-    
+
     if ($routeParams.create) {
         //we are creating so get an empty content item
         contentResource.getScaffold($routeParams.id, $routeParams.doctype)
@@ -63,7 +63,7 @@ function ContentEditController($scope, $routeParams, $location, $q, $window, app
                 $scope.loaded = true;
                 $scope.content = data;
 
-                init($scope.content);                
+                init($scope.content);
             });
     }
     else {
@@ -91,6 +91,54 @@ function ContentEditController($scope, $routeParams, $location, $q, $window, app
 
             });
     }
+
+    $scope.save = function () {
+
+        if (!$scope.busy && formHelper.submitForm({ scope: $scope, statusMessage: "Saving..." })) {
+
+            $scope.busy = true;
+
+            contentResource.save($scope.content, $routeParams.create, fileManager.getFiles())
+                .then(function (data) {
+
+                    formHelper.resetForm({ scope: $scope, notifications: data.notifications });
+
+                    contentEditingHelper.handleSuccessfulSave({
+                        scope: $scope,
+                        savedContent: data,
+                        rebindCallback: contentEditingHelper.reBindChangedProperties($scope.content, data)
+                    });
+
+                    editorState.set($scope.content);
+                    $scope.busy = false;
+
+                    syncTreeNode($scope.content, data.path);
+
+                }, function (err) {
+
+                    contentEditingHelper.handleSaveError({
+                        err: err,
+                        redirectOnFailure: true,
+                        rebindCallback: contentEditingHelper.reBindChangedProperties($scope.content, err.data)
+                    });
+                    
+                    //show any notifications
+                    if (angular.isArray(err.data.notifications)) {
+                        for (var i = 0; i < err.data.notifications.length; i++) {
+                            notificationsService.showNotification(err.data.notifications[i]);
+                        }
+                    }
+
+                    editorState.set($scope.content);
+                    $scope.busy = false;
+                });
+        } else {
+            $scope.busy = false;
+        }
+
+    };
+
+    $scope.saveAndPublish = $scope.sendToPublish = $scope.unPublish = function () { };
 }
 
 angular.module("umbraco").controller("Umbraco.Editors.Content.EditController", ContentEditController);
