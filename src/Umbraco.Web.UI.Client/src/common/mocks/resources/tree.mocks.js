@@ -118,12 +118,12 @@ angular.module('umbraco.mocks').
                       id: -1,
                       children: [
                           { 
-                            name: "Development", id: -2, parentId: -1, childNodesUrl: url, icon: "icon-home", children: [
-                              { name: "Models", childNodesUrl: "/debug/logic/models", id: "models", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl },
+                            name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
+                              { name: "Fact Types", childNodesUrl: "/debug/logic/models", id: "models", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl },
                               { name: "Rules", childNodesUrl: "/debug/logic/rules", id: "rules", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl }
                           ], expanded: true, hasChildren: true, level: 1 },
                           { 
-                            name: "Production", id: -3, parentId: -1, childNodesUrl: url, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: 1 }
+                            name: "Production", id: -3, parentId: -1, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: 1 }
                       ],
                       expanded: true,
                       hasChildren: true,
