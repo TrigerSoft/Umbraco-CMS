@@ -41,13 +41,13 @@ angular.module('umbraco.mocks').
       });
     }
 
-    function returnAllowedChildren(status, data, headers) {
+    function returnAllowedChildren(method, url, data, headers) {
 
       if (!mocksUtils.checkAuth()) {
         return [401, null, null];
       }
 
-      var parentId = mocksUtils.getParameterByName(data, "contentId");
+      var parentId = mocksUtils.getParameterByName(url, "contentId");
       var section = $injector.get('$routeParams').section;
       var dir = section === 'inputs' ? 'Input' : 'Output'
       var types;
@@ -89,6 +89,14 @@ angular.module('umbraco.mocks').
         return response;
       });
     }
+    
+    function returnDeletedNode(status, data, headers) {
+      if (!mocksUtils.checkAuth()) {
+        return [401, null, null];
+      }
+
+      return [200, null, null];
+    }
 
     return {
       register: function () {
@@ -107,6 +115,10 @@ angular.module('umbraco.mocks').
         $httpBackend
           .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/GetEmpty'))
           .respond(returnEmptyNode);
+          
+        $httpBackend
+          .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/DeleteById'))
+          .respond(returnDeletedNode);
 
         $httpBackend
           .whenGET(mocksUtils.urlRegex('/umbraco/Api/MediaType/GetAllowedChildren'))

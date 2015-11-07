@@ -9,26 +9,26 @@ angular.module('umbraco.mocks').
           }
 
           var menu = [
-              { name: "Create", cssclass: "plus", alias: "create", metaData: {} },
+              // { name: "Create", cssclass: "plus", alias: "create", metaData: {} },
 
-              { seperator: true, name: "Delete", cssclass: "remove", alias: "delete", metaData: {} },
-              { name: "Move", cssclass: "move", alias: "move", metaData: {} },
-              { name: "Copy", cssclass: "copy", alias: "copy", metaData: {} },
-              { name: "Sort", cssclass: "sort", alias: "sort", metaData: {} },
+              { /*seperator: true,*/ name: "Delete", cssclass: "remove", alias: "delete", metaData: {} }//,
+              // { name: "Move", cssclass: "move", alias: "move", metaData: {} },
+              // { name: "Copy", cssclass: "copy", alias: "copy", metaData: {} },
+              // { name: "Sort", cssclass: "sort", alias: "sort", metaData: {} },
 
-              { seperator: true, name: "Publish", cssclass: "globe", alias: "publish", metaData: {} },
-              { name: "Rollback", cssclass: "undo", alias: "rollback", metaData: {} },
+              // { seperator: true, name: "Publish", cssclass: "globe", alias: "publish", metaData: {} },
+              // { name: "Rollback", cssclass: "undo", alias: "rollback", metaData: {} },
 
-              { seperator: true, name: "Permissions", cssclass: "lock", alias: "permissions", metaData: {} },
-              { name: "Audit Trail", cssclass: "time", alias: "audittrail", metaData: {} },
-              { name: "Notifications", cssclass: "envelope", alias: "notifications", metaData: {} },
+              // { seperator: true, name: "Permissions", cssclass: "lock", alias: "permissions", metaData: {} },
+              // { name: "Audit Trail", cssclass: "time", alias: "audittrail", metaData: {} },
+              // { name: "Notifications", cssclass: "envelope", alias: "notifications", metaData: {} },
 
-              { seperator: true, name: "Hostnames", cssclass: "home", alias: "hostnames", metaData: {} },
-              { name: "Public Access", cssclass: "group", alias: "publicaccess", metaData: {} },
+              // { seperator: true, name: "Hostnames", cssclass: "home", alias: "hostnames", metaData: {} },
+              // { name: "Public Access", cssclass: "group", alias: "publicaccess", metaData: {} },
 
-              { seperator: true, name: "Reload", cssclass: "refresh", alias: "users", metaData: {} },
+              // { seperator: true, name: "Reload", cssclass: "refresh", alias: "users", metaData: {} },
           
-                { seperator: true, name: "Empty Recycle Bin", cssclass: "trash", alias: "emptyrecyclebin", metaData: {} }
+              //   { seperator: true, name: "Empty Recycle Bin", cssclass: "trash", alias: "emptyrecyclebin", metaData: {} }
           ];
 
           var result = {
@@ -123,7 +123,7 @@ angular.module('umbraco.mocks').
                               { name: "Rules", childNodesUrl: "/debug/logic/rules", id: "rules", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl }
                           ], expanded: true, hasChildren: true, level: 1 },
                           { 
-                            name: "Production", id: -3, parentId: -1, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: 1 }
+                            name: "Production", id: -3, parentId: -1, icon: "icon-globe-alt", children: [], expanded: false, hasChildren: true, level: 1 }
                       ],
                       expanded: true,
                       hasChildren: true,
@@ -254,7 +254,7 @@ angular.module('umbraco.mocks').
 
       
           return [200, t, null];
-      }
+        }
 
 
       return {
@@ -276,6 +276,8 @@ angular.module('umbraco.mocks').
                     .whenGET(mocksUtils.urlRegex('/debug/' + dir + "/" + input))
                     .respond(function () {
 
+                        var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu";
+
                         return $.ajax({
                             url: mocksUtils.remoteBaseUrl + dir + "/" + input,
                             dataType: 'json',
@@ -289,8 +291,13 @@ angular.module('umbraco.mocks').
                                     children: [],
                                     expanded: false,
                                     hasChildren: false,
-                                    level: 3
+                                    level: 3,
+                                    menuUrl: menuUrl
                                 };
+                            });
+                            
+                            children.sort(function(a, b) {
+                              return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
                             });
 
                             return [200, children, null];
@@ -304,6 +311,8 @@ angular.module('umbraco.mocks').
                   $httpBackend
                     .whenGET(mocksUtils.urlRegex('/debug/logic/' + logicType))
                     .respond(function () {
+                      
+                      var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu";
 
                         return $.ajax({
                             url: mocksUtils.remoteBaseUrl + "logic/" + logicType,
@@ -318,8 +327,13 @@ angular.module('umbraco.mocks').
                                     children: [],
                                     expanded: false,
                                     hasChildren: false,
-                                    level: 3
+                                    level: 3,
+                                    menuUrl: menuUrl
                                 };
+                            });
+                            
+                            children.sort(function(a, b) {
+                              return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
                             });
 
                             return [200, children, null];

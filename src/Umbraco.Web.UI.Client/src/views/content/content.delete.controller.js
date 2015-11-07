@@ -6,7 +6,7 @@
  * @description
  * The controller for deleting content
  */
-function ContentDeleteController($scope, contentResource, treeService, navigationService, editorState, $location, dialogService, notificationsService) {
+function ContentDeleteController($scope, contentResource, treeService, navigationService, editorState, $location, dialogService, notificationsService, $routeParams) {
 
     $scope.performDelete = function() {
 
@@ -19,7 +19,7 @@ function ContentDeleteController($scope, contentResource, treeService, navigatio
             //get the root node before we remove it
             var rootNode = treeService.getTreeRoot($scope.currentNode);
 
-            treeService.removeNode($scope.currentNode);
+            var removedIndex = treeService.removeNode($scope.currentNode);
 
             if (rootNode) {
                 //ensure the recycle bin has child nodes now            
@@ -33,9 +33,13 @@ function ContentDeleteController($scope, contentResource, treeService, navigatio
             if (editorState.current && editorState.current.id == $scope.currentNode.id) {
 
                 //If the deleted item lived at the root then just redirect back to the root, otherwise redirect to the item's parent
-                var location = "/content";
-                if ($scope.currentNode.parentId.toString() !== "-1")
-                    location = "/content/content/edit/" + $scope.currentNode.parentId;
+                var location = "/" + $routeParams.section;
+                var children = $scope.currentNode.parent().children;
+                if (children.length) {
+                    if (removedIndex === children.length)
+                        removedIndex--;
+                    location += "/content/edit/" + children[removedIndex].id;
+                }
 
                 $location.path(location);
             }

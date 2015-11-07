@@ -6,7 +6,7 @@
  * @description
  * The controller for deleting content
  */
-function MediaDeleteController($scope, mediaResource, treeService, navigationService, editorState, $location, dialogService, notificationsService) {
+function MediaDeleteController($scope, mediaResource, treeService, navigationService, editorState, $location, dialogService, notificationsService, $routeParams) {
 
     $scope.performDelete = function() {
 
@@ -19,7 +19,7 @@ function MediaDeleteController($scope, mediaResource, treeService, navigationSer
             //get the root node before we remove it
             var rootNode = treeService.getTreeRoot($scope.currentNode);
 
-            treeService.removeNode($scope.currentNode);
+            var removedIndex = treeService.removeNode($scope.currentNode);
 
             if (rootNode) {
                 //ensure the recycle bin has child nodes now            
@@ -33,9 +33,13 @@ function MediaDeleteController($scope, mediaResource, treeService, navigationSer
             if (editorState.current && editorState.current.id == $scope.currentNode.id) {
 
             	//If the deleted item lived at the root then just redirect back to the root, otherwise redirect to the item's parent
-            	var location = "/media";
-            	if ($scope.currentNode.parentId.toString() !== "-1")
-            		location = "/media/media/edit/" + $scope.currentNode.parentId;
+                var location = "/" + $routeParams.section;
+                var children = $scope.currentNode.parent().children;
+                if (children.length) {
+                    if (removedIndex === children.length)
+                        removedIndex--;
+                    location += "/media/edit/" + children[removedIndex].id;
+                }
 
                 $location.path(location);
             }

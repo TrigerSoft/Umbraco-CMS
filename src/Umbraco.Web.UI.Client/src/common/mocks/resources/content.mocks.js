@@ -211,7 +211,7 @@ angular.module('umbraco.mocks').
           .respond(returnEmptyNode);
 
         $httpBackend
-          .whenDELETE(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/DeleteById'))
+          .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/DeleteById'))
           .respond(returnDeletedNode);
 
         // $httpBackend

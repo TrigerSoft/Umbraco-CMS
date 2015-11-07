@@ -15,6 +15,9 @@ function CodeEditorController($scope, $element, assetsService, dialogService, $t
                 editor.setValue($scope.model.value);
                 editor.clearSelection();
                 editor.gotoLine(1);
+                $timeout(function () {
+                    editor.focus();
+                }, 200, false);
             }
 
             editor.setHighlightActiveLine(false);
@@ -26,9 +29,8 @@ function CodeEditorController($scope, $element, assetsService, dialogService, $t
 
             editor.on('blur', function (e) {
                 $scope.model.value = editor.getValue();
+                $scope.$parent.$digest();
             });
-            
-            editor.focus();
 
             //load the seperat css for the editor to avoid it blocking our js loading TEMP HACK
             //assetsService.loadCss("lib/markdown/markdown.css");

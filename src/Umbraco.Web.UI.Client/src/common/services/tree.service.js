@@ -284,7 +284,9 @@ function treeService($q, treeResource, iconHelper, notificationsService, eventsS
                 throw "Cannot remove a node that doesn't have a parent";
             }
             //remove the current item from it's siblings
-            treeNode.parent().children.splice(treeNode.parent().children.indexOf(treeNode), 1);            
+            var index = treeNode.parent().children.indexOf(treeNode);
+            treeNode.parent().children.splice(index, 1);
+            return index;            
         },
         
         /**
