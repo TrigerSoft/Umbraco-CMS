@@ -40,23 +40,23 @@ angular.module('umbraco.mocks').
             },
 
             /** Creats a mock content object */
-            getMockContent: function(id) {
+            getMockContent: function(id, fileType) {
                 var node = {
-                    name: "My content with id: " + id,
+                    name: null,
                     // updateDate: new Date(),
                     // publishDate: new Date(),
                     // createDate: new Date(),
                     id: id,
-                    parentId: "rules",
+                    parentId: fileType,
                     icon: "icon-umb-content",
                     owner: { name: "Administrator", id: 0 },
                     updater: { name: "Per Ploug Krogslund", id: 1 },
-                    path: "-1,-2,rules," + id,
+                    path: "-1,-2," + fileType + "," + id,
                     // allowedActions: ["U", "H", "A"],
                     tabs: [
                     
                     {
-                        label: "Edit Rule",
+                        label: "Edit",
                         id: 0,
                         properties: [
                             { alias: "code", hideLabel: true, view: "code" }

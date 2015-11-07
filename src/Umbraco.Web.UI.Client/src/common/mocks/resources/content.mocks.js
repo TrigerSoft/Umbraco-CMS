@@ -2,53 +2,53 @@ angular.module('umbraco.mocks').
   factory('contentMocks', ['$httpBackend', 'mocksUtils', function ($httpBackend, mocksUtils) {
     'use strict';
 
-    function returnChildren(status, data, headers) {
-      if (!mocksUtils.checkAuth()) {
-        return [401, null, null];
-      }
+    // function returnChildren(status, data, headers) {
+    //   if (!mocksUtils.checkAuth()) {
+    //     return [401, null, null];
+    //   }
 
-      var pageNumber = Number(mocksUtils.getParameterByName(data, "pageNumber"));
-      var filter = mocksUtils.getParameterByName(data, "filter");
-      var pageSize = Number(mocksUtils.getParameterByName(data, "pageSize"));
-      var parentId = Number(mocksUtils.getParameterByName(data, "id"));
+    //   var pageNumber = Number(mocksUtils.getParameterByName(data, "pageNumber"));
+    //   var filter = mocksUtils.getParameterByName(data, "filter");
+    //   var pageSize = Number(mocksUtils.getParameterByName(data, "pageSize"));
+    //   var parentId = Number(mocksUtils.getParameterByName(data, "id"));
 
-      if (pageNumber === 0) {
-        pageNumber = 1;
-      }
-      var collection = { pageSize: pageSize, totalItems: 68, totalPages: 7, pageNumber: pageNumber, filter: filter };
-      collection.totalItems = 56 - (filter.length);
-      if (pageSize > 0) {
-        collection.totalPages = Math.round(collection.totalItems / collection.pageSize);
-      }
-      else {
-        collection.totalPages = 1;
-      }
-      collection.items = [];
+    //   if (pageNumber === 0) {
+    //     pageNumber = 1;
+    //   }
+    //   var collection = { pageSize: pageSize, totalItems: 68, totalPages: 7, pageNumber: pageNumber, filter: filter };
+    //   collection.totalItems = 56 - (filter.length);
+    //   if (pageSize > 0) {
+    //     collection.totalPages = Math.round(collection.totalItems / collection.pageSize);
+    //   }
+    //   else {
+    //     collection.totalPages = 1;
+    //   }
+    //   collection.items = [];
 
-      if (collection.totalItems < pageSize || pageSize < 1) {
-        collection.pageSize = collection.totalItems;
-      } else {
-        collection.pageSize = pageSize;
-      }
+    //   if (collection.totalItems < pageSize || pageSize < 1) {
+    //     collection.pageSize = collection.totalItems;
+    //   } else {
+    //     collection.pageSize = pageSize;
+    //   }
 
-      var id = 0;
-      for (var i = 0; i < collection.pageSize; i++) {
-        id = (parentId + i) * pageNumber;
-        var cnt = mocksUtils.getMockContent(id);
+    //   var id = 0;
+    //   for (var i = 0; i < collection.pageSize; i++) {
+    //     id = (parentId + i) * pageNumber;
+    //     var cnt = mocksUtils.getMockContent(id);
 
-        //here we fake filtering
-        if (filter !== '') {
-          cnt.name = filter + cnt.name;
-        }
+    //     //here we fake filtering
+    //     if (filter !== '') {
+    //       cnt.name = filter + cnt.name;
+    //     }
 
-        //set a fake sortOrder
-        cnt.sortOrder = i + 1;
+    //     //set a fake sortOrder
+    //     cnt.sortOrder = i + 1;
 
-        collection.items.push(cnt);
-      }
+    //     collection.items.push(cnt);
+    //   }
 
-      return [200, collection, null];
-    }
+    //   return [200, collection, null];
+    // }
 
     function returnDeletedNode(status, data, headers) {
       if (!mocksUtils.checkAuth()) {
@@ -104,37 +104,42 @@ angular.module('umbraco.mocks').
         request = $.when(null);
       }
 
-      return request.then(function (file) {
-        var node = mocksUtils.getMockContent(id);
+      return request.then(function (logic) {
+        var node = mocksUtils.getMockContent(id, fileType);
+
+        if (logic) {
+          node.name = logic.name;
+          node.tabs[0].properties[0].value = logic.content;
+        }
 
         return [200, node, null];
       });
     }
 
-    function returnNodebyIds(status, data, headers) {
+    // function returnNodebyIds(status, data, headers) {
 
-      if (!mocksUtils.checkAuth()) {
-        return [401, null, null];
-      }
+    //   if (!mocksUtils.checkAuth()) {
+    //     return [401, null, null];
+    //   }
 
-      var ids = mocksUtils.getParameterByName(data, "ids") || [1234, 23324, 2323, 23424];
-      var nodes = [];
+    //   var ids = mocksUtils.getParameterByName(data, "ids") || [1234, 23324, 2323, 23424];
+    //   var nodes = [];
 
-      $(ids).each(function (i, id) {
-        var _id = parseInt(id, 10);
-        nodes.push(mocksUtils.getMockContent(_id));
-      });
+    //   $(ids).each(function (i, id) {
+    //     var _id = parseInt(id, 10);
+    //     nodes.push(mocksUtils.getMockContent(_id));
+    //   });
 
-      return [200, nodes, null];
-    }
+    //   return [200, nodes, null];
+    // }
 
-    function returnSort(status, data, headers) {
-      if (!mocksUtils.checkAuth()) {
-        return [401, null, null];
-      }
+    // function returnSort(status, data, headers) {
+    //   if (!mocksUtils.checkAuth()) {
+    //     return [401, null, null];
+    //   }
 
-      return [200, null, null];
-    }
+    //   return [200, null, null];
+    // }
 
     function returnSave(method, url, data, headers) {
       if (!mocksUtils.checkAuth()) {
@@ -169,7 +174,10 @@ angular.module('umbraco.mocks').
 
         id = create ? inputType + '_' + id : payLoad.value.id;
 
-        var node = mocksUtils.getMockContent(id);
+        var node = mocksUtils.getMockContent(id, inputType);
+
+        node.name = logic.name;
+        node.tabs[0].properties[0].value = logic.content;
 
         return [200, node, null];
       });
@@ -182,17 +190,17 @@ angular.module('umbraco.mocks').
           .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/PostSave'))
           .respond(returnSave);
 
-        $httpBackend
-          .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/PostSort'))
-          .respond(returnSort);
+        // $httpBackend
+        //   .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/PostSort'))
+        //   .respond(returnSort);
 
-        $httpBackend
-          .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/GetChildren'))
-          .respond(returnChildren);
+        // $httpBackend
+        //   .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/GetChildren'))
+        //   .respond(returnChildren);
 
-        $httpBackend
-          .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/GetByIds'))
-          .respond(returnNodebyIds);
+        // $httpBackend
+        //   .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/GetByIds'))
+        //   .respond(returnNodebyIds);
 
         $httpBackend
           .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/GetById?'))
@@ -206,9 +214,9 @@ angular.module('umbraco.mocks').
           .whenDELETE(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/DeleteById'))
           .respond(returnDeletedNode);
 
-        $httpBackend
-          .whenDELETE(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/EmptyRecycleBin'))
-          .respond(returnDeletedNode);
+        // $httpBackend
+        //   .whenDELETE(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/EmptyRecycleBin'))
+        //   .respond(returnDeletedNode);
       },
 
       expectGetById: function () {
