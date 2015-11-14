@@ -7,6 +7,7 @@ angular.module('umbraco.mocks').
 
         return {
             remoteBaseUrl: "http://localhost:39245/configuration/dev/",
+            idToPath: function(id) { return id.replace(/_/g, '/'); },
             getMockDataType: function(id, selectedId) {
                 var dataType = {
                     id: id,

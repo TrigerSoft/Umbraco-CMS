@@ -83,6 +83,19 @@ function contentResource($q, $http, umbDataFormatter, umbRequestHelper) {
                     }),
                 'Failed to sort content');
         },
+        
+        validate: function (args) {
+            if (!args) {
+                throw "args cannot be null";
+            }
+            if (!args.node) {
+                throw "args.node cannot be null";
+            }
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(umbRequestHelper.getApiUrl("contentApiBaseUrl", "PostValidate"), args),
+                'Failed to validate content');
+        },
 
         /**
          * @ngdoc method

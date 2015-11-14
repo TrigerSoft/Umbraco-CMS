@@ -92,51 +92,30 @@ function ContentEditController($scope, $routeParams, $location, $q, $window, app
             });
     }
 
+    var handleValidation = function (data) {
+        var tab = $scope.content.tabs[0];
+        tab.properties[0].validationMessages = data.tabs[0].properties[0].validationMessages;
+        tab.currentValidationMessages = data.tabs[0].currentValidationMessages;
+        tab.validationMessages = data.tabs[0].validationMessages;
+    };
+
     $scope.save = function () {
 
-        if (!$scope.busy && formHelper.submitForm({ scope: $scope, statusMessage: "Saving..." })) {
-
-            $scope.busy = true;
-
-            contentResource.save($scope.content, $routeParams.create, fileManager.getFiles())
-                .then(function (data) {
-
-                    formHelper.resetForm({ scope: $scope, notifications: data.notifications });
-
-                    contentEditingHelper.handleSuccessfulSave({
-                        scope: $scope,
-                        savedContent: data,
-                        rebindCallback: contentEditingHelper.reBindChangedProperties($scope.content, data)
-                    });
-
-                    editorState.set($scope.content);
-                    $scope.busy = false;
-
-                    syncTreeNode($scope.content, data.path);
-
-                }, function (err) {
-
-                    contentEditingHelper.handleSaveError({
-                        err: err,
-                        redirectOnFailure: true,
-                        rebindCallback: contentEditingHelper.reBindChangedProperties($scope.content, err.data)
-                    });
-                    
-                    //show any notifications
-                    if (angular.isArray(err.data.notifications)) {
-                        for (var i = 0; i < err.data.notifications.length; i++) {
-                            notificationsService.showNotification(err.data.notifications[i]);
-                        }
-                    }
-
-                    editorState.set($scope.content);
-                    $scope.busy = false;
-                });
-        } else {
-            $scope.busy = false;
-        }
-
+        contentEditingHelper.contentEditorPerformSave({
+            scope: $scope,
+            content: $scope.content,
+            statusMessage: "Saving...",
+            saveMethod: contentResource.save
+        }).then(function (data) {
+            handleValidation(data);
+            syncTreeNode($scope.content, data.path);
+        });
     };
+
+    $scope.validate = function () {
+
+        contentResource.validate({node: $scope.content}).then(handleValidation);
+    }
 
     $scope.saveAndPublish = $scope.sendToPublish = $scope.unPublish = function () { };
 }

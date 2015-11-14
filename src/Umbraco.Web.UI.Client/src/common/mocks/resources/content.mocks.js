@@ -1,5 +1,5 @@
 angular.module('umbraco.mocks').
-  factory('contentMocks', ['$httpBackend', 'mocksUtils', function ($httpBackend, mocksUtils) {
+  factory('contentMocks', ['$httpBackend', 'mocksUtils', '$rootScope', function ($httpBackend, mocksUtils, $rootScope) {
     'use strict';
 
     // function returnChildren(status, data, headers) {
@@ -50,12 +50,21 @@ angular.module('umbraco.mocks').
     //   return [200, collection, null];
     // }
 
-    function returnDeletedNode(status, data, headers) {
+    function returnDeletedNode(method, url, data, headers) {
       if (!mocksUtils.checkAuth()) {
         return [401, null, null];
       }
 
-      return [200, null, null];
+      var id = mocksUtils.getParameterByName(url, "id");
+
+      return $.ajax({
+        url: mocksUtils.remoteBaseUrl + "logic/" + mocksUtils.idToPath(id),
+        type: 'DELETE'
+      }).then(function () {
+        return [200, null, null];
+      }, function (xhr) {
+        return [xhr.status, null, null];
+      });
     }
 
     function returnEmptyNode(method, url, data, headers) {
@@ -95,7 +104,7 @@ angular.module('umbraco.mocks').
       var request;
       if (id) {
         request = $.ajax({
-          url: mocksUtils.remoteBaseUrl + "logic/" + id.replace(/_/g, '/'),
+          url: mocksUtils.remoteBaseUrl + "logic/" + mocksUtils.idToPath(id),
           dataType: 'json',
           type: 'GET'
         }).then(_.identity);
@@ -158,7 +167,7 @@ angular.module('umbraco.mocks').
 
       var type = create ? "POST" : "PUT";
       var remoteUrl = mocksUtils.remoteBaseUrl + 'logic/';
-      remoteUrl += create ? inputType : payLoad.value.id.replace(/_/g, '/');
+      remoteUrl += create ? inputType : mocksUtils.idToPath(payLoad.value.id);
 
       var ajax = {
         url: remoteUrl,
@@ -179,7 +188,57 @@ angular.module('umbraco.mocks').
         node.name = logic.name;
         node.tabs[0].properties[0].value = logic.content;
 
+        validate(node, true).then(function () {
+          $rootScope.$apply();
+        });
+
         return [200, node, null];
+      });
+    }
+
+    function returnValidate(method, url, data, headers) {
+      if (!mocksUtils.checkAuth()) {
+        return [401, null, null];
+      }
+
+      var node = angular.fromJson(data).node;
+
+      return validate(node).then(function () { return [200, node, null]; });
+    }
+
+    function validate(node, saved) {
+      var type = saved ? "GET" : "POST";
+      var path = mocksUtils.idToPath(node.id || "NEW");
+      var remoteUrl = mocksUtils.remoteBaseUrl + 'test/compile?path=' + path;
+
+      var ajax = {
+        url: remoteUrl,
+        contentType: 'application/json',
+        type: type
+      };
+
+      var tab = node.tabs[0];
+      var property = tab.properties[0];
+
+      if (!saved) {
+        ajax.data = angular.toJson(property.value);
+        ajax.dataType = 'json';
+      }
+
+      tab.validationMessages = {};
+      property.validationMessages = [];
+
+      return $.ajax(ajax).then(function (messages) {
+        messages = messages || [];
+
+        tab.validationMessages.all = _.groupBy(messages, "level");
+
+        messages = _.filter(messages, function (message) {
+          return message.path === path;
+        });
+
+        tab.validationMessages.current = _.groupBy(messages, "level");
+        Array.prototype.push.apply(property.validationMessages, messages);
       });
     }
 
@@ -189,6 +248,10 @@ angular.module('umbraco.mocks').
         $httpBackend
           .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/PostSave'))
           .respond(returnSave);
+
+        $httpBackend
+          .whenPOST(mocksUtils.urlRegex("/umbraco/UmbracoApi/Content/PostValidate"))
+          .respond(returnValidate);
 
         // $httpBackend
         //   .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/PostSort'))

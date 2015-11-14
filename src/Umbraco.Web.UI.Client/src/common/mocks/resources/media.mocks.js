@@ -89,13 +89,26 @@ angular.module('umbraco.mocks').
         return response;
       });
     }
-    
-    function returnDeletedNode(status, data, headers) {
+
+    function returnDeletedNode(method, url, data, headers) {
       if (!mocksUtils.checkAuth()) {
         return [401, null, null];
       }
 
-      return [200, null, null];
+      var id = mocksUtils.getParameterByName(url, "id");
+
+      var section = $injector.get('$routeParams').section;
+
+      return $.ajax({
+        url: mocksUtils.remoteBaseUrl + section + "/" + id.replace(/_/g, '/'),
+        type: 'DELETE'
+      }).then(function () {
+        return [200, null, null];
+      }, function (xhr) {
+        return [xhr.status, null, null];
+      });
+
+
     }
 
     return {
@@ -115,7 +128,7 @@ angular.module('umbraco.mocks').
         $httpBackend
           .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/GetEmpty'))
           .respond(returnEmptyNode);
-          
+
         $httpBackend
           .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/DeleteById'))
           .respond(returnDeletedNode);

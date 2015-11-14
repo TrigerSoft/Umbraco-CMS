@@ -12,9 +12,8 @@ function CodeEditorController($scope, $element, assetsService, dialogService, $t
 
             var editor = ace.edit($element[0]);
             if ($scope.model.value) {
-                editor.setValue($scope.model.value);
-                editor.clearSelection();
-                editor.gotoLine(1);
+                editor.getSession().setValue($scope.model.value);
+
                 $timeout(function () {
                     editor.focus();
                 }, 200, false);
@@ -29,7 +28,44 @@ function CodeEditorController($scope, $element, assetsService, dialogService, $t
 
             editor.on('blur', function (e) {
                 $scope.model.value = editor.getValue();
-                $scope.$parent.$digest();
+                if (!$scope.$root.$$phase)
+                    $scope.$parent.$digest();
+            });
+
+            editor.commands.addCommand({
+                name: 'saveFile',
+                bindKey: {
+                    win: 'Ctrl-S',
+                    mac: 'Command-S',
+                    sender: 'editor|cli'
+                },
+                exec: function (env, args, request) {
+                    $scope.model.value = editor.getValue();
+                    if (!$scope.$root.$$phase)
+                        $scope.$parent.$digest();
+                },
+                passEvent: true
+            });
+
+
+            $scope.$watchCollection(function () { return $scope.model.validationMessages; }, function (nv, ov) {
+
+                var session = editor.getSession();
+                session.clearAnnotations();
+                
+                if (!nv || !nv.length)
+                    return;
+                
+                var annotations = _.map(nv, function(item) {
+                    return {
+                      row: item.line ? item.line - 1 : 0,
+                      column: item.column,
+                      text: item.text,
+                      type: item.level.toLowerCase()  
+                    };
+                });
+                
+                session.setAnnotations(annotations);
             });
 
             //load the seperat css for the editor to avoid it blocking our js loading TEMP HACK

@@ -591,7 +591,7 @@ function treeService($q, treeResource, iconHelper, notificationsService, eventsS
             var deferred = $q.defer();
             
             //set the node to loading
-            node.loading = true;
+            //node.loading = true;
 
             this.getChildren({ node: node.parent(), section: node.section }).then(function(data) {
 
@@ -620,9 +620,11 @@ function treeService($q, treeResource, iconHelper, notificationsService, eventsS
                     deferred.resolve(node.parent().children[index]);
                 }
                 else {
+                    node.loading = true;
                     deferred.reject();
                 }
             }, function() {
+                node.loading = true;
                 deferred.reject();
             });
             
