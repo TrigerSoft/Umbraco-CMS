@@ -227,8 +227,8 @@ angular.module('umbraco.mocks').
 
       tab.validationMessages = {};
       property.validationMessages = [];
-
-      return $.ajax(ajax).then(function (messages) {
+      
+      var handleMessages = function (messages) {
         messages = messages || [];
 
         tab.validationMessages.all = _.groupBy(messages, "level");
@@ -239,7 +239,12 @@ angular.module('umbraco.mocks').
 
         tab.validationMessages.current = _.groupBy(messages, "level");
         Array.prototype.push.apply(property.validationMessages, messages);
-      });
+      };
+
+      return $.ajax(ajax).then(saved ? function (compilation) {
+        handleMessages(compilation.messages);
+        mocksUtils.reportCompilation(compilation);
+      } : handleMessages);
     }
 
     return {

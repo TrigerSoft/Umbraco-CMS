@@ -7,7 +7,7 @@
  * @description
  * The tree service factory, used internally by the umbTree and umbTreeItem directives
  */
-function treeService($q, treeResource, iconHelper, notificationsService, eventsService) {
+function treeService($q, treeResource, iconHelper, notificationsService, eventsService, $injector) {
 
     //SD: Have looked at putting this in sessionStorage (not localStorage since that means you wouldn't be able to work
     // in multiple tabs) - however our tree structure is cyclical, meaning a node has a reference to it's parent and it's children
@@ -554,7 +554,7 @@ function treeService($q, treeResource, iconHelper, notificationsService, eventsS
                 throw "No node defined on args object for getChildren";
             }
 
-            var section = args.section || 'content';
+            var section = args.section || $injector.get('$routeParams').section;
             var treeItem = args.node;
 
             var self = this;

@@ -3,13 +3,33 @@ angular.module('umbraco.mocks').
 		'use strict';
 
 		function factTypes(input) {
-			return $.ajax({
-				url: mocksUtils.remoteBaseUrl + "inputs/" + input + "/factTypes",
-				dataType: 'json',
-				type: 'GET'
-			}).then(function (factTypes) {
+			return mocksUtils.getFactTypes().then(function (factTypes) {
 				var items = {};
 				_.each(factTypes, function (factType) {
+					
+					var tableEntity = factType.annotations && factType.annotations.tableEntity;
+					
+					switch (input) {
+						case "EventHub":
+							var role = factType.annotations && factType.annotations.role;
+							if (!role || role.toLowerCase() !== "event")
+								return;
+								
+							break;
+								
+						case "TableStorage":
+							if (!tableEntity)
+								return;
+								
+							break;
+								
+						case "BlobStorage":
+							if (tableEntity)
+								return;
+								
+							break;
+					}
+					
 					var fullName = fullNameFromFactType(factType);
 					items[fullName] = fullName;
 				});
@@ -19,11 +39,7 @@ angular.module('umbraco.mocks').
 		}
 
 		function entryPoints(input) {
-			return $.ajax({
-				url: mocksUtils.remoteBaseUrl + "inputs/" + input + "/entryPoints",
-				dataType: 'json',
-				type: 'GET'
-			}).then(function (entryPoints) {
+			return mocksUtils.getEntryPoints().then(function (entryPoints) {
 				var items = {};
 				_.each(entryPoints, function (entryPoint) {
 					items[entryPoint] = entryPoint;
@@ -280,7 +296,7 @@ angular.module('umbraco.mocks').
 						break;
 				}
 
-				return getNode(id, entity, entryPoints(inputType), factTypes(inputType));
+				return getNode(id, $.when(entity), entryPoints(inputType), factTypes(inputType));
 			}
 		};
 

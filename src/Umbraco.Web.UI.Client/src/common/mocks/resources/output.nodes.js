@@ -3,13 +3,28 @@ angular.module('umbraco.mocks').
 		'use strict';
 
 		function factTypes(input) {
-			return $.ajax({
-				url: mocksUtils.remoteBaseUrl + 'outputs/' + input + "/factTypes",
-				dataType: 'json',
-				type: 'GET'
-			}).then(function (factTypes) {
+			return mocksUtils.getFactTypes().then(function (factTypes) {
 				var items = {};
 				_.each(factTypes, function (factType) {
+					
+					var tableEntity = factType.annotations && factType.annotations.tableEntity;
+					
+					switch (input) {
+								
+						case "TableStorage":
+							if (!tableEntity)
+								return;
+								
+							break;
+								
+						case "EventHub":
+						case "BlobStorage":
+							if (tableEntity)
+								return;
+								
+							break;
+					}
+					
 					var fullName = fullNameFromFactType(factType);
 					items[fullName] = fullName;
 				});
@@ -248,7 +263,7 @@ angular.module('umbraco.mocks').
 						break;
 				}
 
-				return getNode(id, entity, factTypes(inputType));
+				return getNode(id, $.when(entity), factTypes(inputType));
 			}
 		};
 

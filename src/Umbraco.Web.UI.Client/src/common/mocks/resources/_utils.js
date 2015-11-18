@@ -4,9 +4,19 @@ angular.module('umbraco.mocks').
          
         //by default we will perform authorization
         var doAuth = true;
+        var _compilation = null;
+        var remoteBaseUrl = "http://localhost:39245/configuration/dev/";
+        
+        var compile = function() {
+            return $.ajax({
+                    url: remoteBaseUrl + 'test/compile',
+                    contentType: 'application/json',
+                    type: "GET"
+                }).then(mocksUtils.reportCompilation);
+        }
 
-        return {
-            remoteBaseUrl: "http://localhost:39245/configuration/dev/",
+        var mocksUtils = {
+            remoteBaseUrl: remoteBaseUrl,
             idToPath: function(id) { return id.replace(/_/g, '/'); },
             getMockDataType: function(id, selectedId) {
                 var dataType = {
@@ -38,6 +48,20 @@ angular.module('umbraco.mocks').
 
                 };
                 return dataType;
+            },
+            
+            reportCompilation: function(compilation) {
+                _compilation = compilation;  
+            },
+            
+            getFactTypes: function() {
+              return _compilation ? $.when(_compilation.factTypes) : compile().
+                then(function() { return _compilation.factTypes; });  
+            },
+            
+            getEntryPoints: function() {
+              return _compilation ? $.when(_compilation.entryPoints) : compile().
+                then(function() { return _compilation.entryPoints; });  
             },
 
             /** Creats a mock content object */
@@ -137,4 +161,6 @@ angular.module('umbraco.mocks').
                 return results;
             }
         };
+        
+        return mocksUtils;
     }]);
