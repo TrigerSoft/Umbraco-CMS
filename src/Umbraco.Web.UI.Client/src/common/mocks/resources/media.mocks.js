@@ -158,7 +158,9 @@ angular.module('umbraco.mocks').
               var value = prop.value;
               switch (prop.alias) {
                 case "factType":
-                  value = "";
+                  if (value) {
+                    value = mocksUtils.fullNameToFactType(value);
+                  }
                   break;
                 case "serializationFormat":
                   name = "format";

@@ -25,30 +25,12 @@ angular.module('umbraco.mocks').
 							break;
 					}
 					
-					var fullName = fullNameFromFactType(factType);
+					var fullName = mocksUtils.fullNameFromFactType(factType);
 					items[fullName] = fullName;
 				});
 
 				return items;
 			});
-		}
-
-		function fullNameFromFactType(factType) {
-			return factType.packageName + '.' + factType.typeName;
-		}
-
-		function fullNameToFactType(fullName) {
-			var lastDot = fullName.lastIndexOf('.');
-			var packageName = null;
-			var typeName = fullName;
-			if (lastDot >= 0) {
-				packageName = fullName.substr(0, lastDot);
-				typeName = fullName.substr(lastDot + 1);
-			}
-			return {
-				packageName: packageName,
-				typeName: typeName
-			};
 		}
 
 		function _getNode(id, properties, factTypes) {
@@ -89,7 +71,7 @@ angular.module('umbraco.mocks').
 								{
 									label: 'Type',
 									description: "when an instance of this type is inserted, it will be sent to the Event Hub",
-									value: properties.factType && fullNameFromFactType(properties.factType),
+									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
 									view: "dropdown",
 									alias: "factType",
 									config: {
@@ -156,7 +138,7 @@ angular.module('umbraco.mocks').
 								{
 									label: 'Type',
 									description: "when an instance of this type is inserted, it will be upserted to the Table",
-									value: properties.factType && fullNameFromFactType(properties.factType),
+									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
 									view: "dropdown",
 									alias: "factType",
 									config: {
@@ -217,7 +199,7 @@ angular.module('umbraco.mocks').
 								{
 									label: 'Type',
 									description: "when an instance of this type is inserted, it will be appended to the Blob",
-									value: properties.factType && fullNameFromFactType(properties.factType),
+									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
 									view: "dropdown",
 									alias: "factType",
 									config: {

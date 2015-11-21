@@ -139,14 +139,14 @@ angular.module('umbraco.mocks').
                       id: -1,
                       children: [
                           {
-                              name: "Development", id: -2, parentId: -1, icon: "", children: [
+                              name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
                                   { name: "Event Hubs", childNodesUrl: "/debug/inputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
                                   { name: "Table Storage", childNodesUrl: "/debug/inputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
                                   { name: "Blob Storage", childNodesUrl: "/debug/inputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
                               ], expanded: true, hasChildren: true, level: 1
                           },
                           {
-                              name: "Production", id: -3, parentId: -1, icon: "", children: [
+                              name: "Production", id: -3, parentId: -1, icon: "icon-globe-alt", children: [
                                   { name: "Event Hubs", childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
                                   { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
                                   { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
@@ -168,14 +168,14 @@ angular.module('umbraco.mocks').
                       id: -1,
                       children: [
                           {
-                              name: "Development", id: -2, parentId: -1, icon: "", children: [
+                              name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
                                   { name: "Event Hubs", childNodesUrl: "/debug/outputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
                                   { name: "Table Storage", childNodesUrl: "/debug/outputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
                                   { name: "Blob Storage", childNodesUrl: "/debug/outputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
                               ], expanded: true, hasChildren: true, level: 1
                           },
                           {
-                              name: "Production", id: -3, icon: "", children: [
+                              name: "Production", id: -3, icon: "icon-globe-alt", children: [
                                   { name: "Event Hubs", childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
                                   { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
                                   { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
@@ -190,6 +190,21 @@ angular.module('umbraco.mocks').
                       metaData: { treeAlias: "media" }
                   };
 
+                  break;
+               case "deploy":
+                  t = {
+                      name: "deploy",
+                      id: -1,
+                      children: [
+                          { name: "Development", id: -1, icon: "icon-home", children: [], expanded: false, hasChildren: false, level: 1},
+                          { name: "Production", id: -2, icon: "icon-globe-alt", children: [], expanded: false, hasChildren: false, level: 1},
+                      ],
+                      expanded: true,
+                      hasChildren: true,
+                      level: 0,
+                      metaData: { treeAlias: "deploy" }
+                  };
+                  
                   break;
               case "developer":                  
 
@@ -212,24 +227,6 @@ angular.module('umbraco.mocks').
                       isContainer: true
                   };
 
-                  break;
-              case "settings":
-                  t = {
-                      name: "settings",
-                      id: -1,
-                      children: [
-                          { name: "Stylesheets", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "stylesheets" } },
-                          { name: "Templates", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "templates" } },
-                          { name: "Dictionary", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "dictionary" } },
-                          { name: "Media types", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "mediaTypes" } },
-                          { name: "Document types", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "nodeTypes" } }
-                      ],
-                      expanded: true,
-                      hasChildren: true,
-                      level: 0,
-                      isContainer: true
-                  };
-                  
                   break;
               default:
                   

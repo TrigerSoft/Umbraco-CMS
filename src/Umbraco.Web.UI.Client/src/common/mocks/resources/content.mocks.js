@@ -49,10 +49,44 @@ angular.module('umbraco.mocks').
 
     //   return [200, collection, null];
     // }
+    
+    function returnSummary(status, data, headers) {
+      if (!mocksUtils.checkAuth()) {
+        return $.when([401, null, null]);
+      }
+
+      return $.ajax({
+        url: mocksUtils.remoteBaseUrl + "test/summary/rules",
+        type: 'GET'
+      }).then(function (messages) {
+        if (!messages || !messages.length)
+          return [200, { pageSize: 10, totalItems: 0, totalPages: 0, includeProperties: [] }, null];
+        var collection = { pageSize: 10, items: messages, totalItems: messages.length, totalPages: 1, pageNumber: 1 };
+        
+        collection.includeProperties = [
+          {
+            alias: "level",
+            header: "Severity",
+            allowSorting: true,
+            isEditLink: true
+          },
+          {
+            alias: "text",
+            header: "Message"
+          }
+        ];
+        
+        _.each(messages, function(m) {
+          m.id = mocksUtils.pathToId(m.path);
+        });
+
+        return [200, collection, null];
+      });
+    }
 
     function returnDeletedNode(method, url, data, headers) {
       if (!mocksUtils.checkAuth()) {
-        return [401, null, null];
+        return $.when([401, null, null]);
       }
 
       var id = mocksUtils.getParameterByName(url, "id");
@@ -152,7 +186,7 @@ angular.module('umbraco.mocks').
 
     function returnSave(method, url, data, headers) {
       if (!mocksUtils.checkAuth()) {
-        return [401, null, null];
+        return $.when([401, null, null]);
       }
 
       var payLoad = angular.fromJson(data);
@@ -227,7 +261,7 @@ angular.module('umbraco.mocks').
 
       tab.validationMessages = {};
       property.validationMessages = [];
-      
+
       var handleMessages = function (messages) {
         messages = messages || [];
 
@@ -262,9 +296,9 @@ angular.module('umbraco.mocks').
         //   .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/PostSort'))
         //   .respond(returnSort);
 
-        // $httpBackend
-        //   .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/GetChildren'))
-        //   .respond(returnChildren);
+        $httpBackend
+          .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/GetChildren'))
+          .respond(returnSummary);
 
         // $httpBackend
         //   .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Content/GetByIds'))

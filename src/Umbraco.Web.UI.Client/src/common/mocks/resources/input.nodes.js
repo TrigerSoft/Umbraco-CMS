@@ -30,7 +30,7 @@ angular.module('umbraco.mocks').
 							break;
 					}
 					
-					var fullName = fullNameFromFactType(factType);
+					var fullName = mocksUtils.fullNameFromFactType(factType);
 					items[fullName] = fullName;
 				});
 
@@ -47,24 +47,6 @@ angular.module('umbraco.mocks').
 
 				return items;
 			});
-		}
-
-		function fullNameFromFactType(factType) {
-			return factType.packageName + '.' + factType.typeName;
-		}
-
-		function fullNameToFactType(fullName) {
-			var lastDot = fullName.lastIndexOf('.');
-			var packageName = null;
-			var typeName = fullName;
-			if (lastDot >= 0) {
-				packageName = fullName.substr(0, lastDot);
-				typeName = fullName.substr(lastDot + 1);
-			}
-			return {
-				packageName: packageName,
-				typeName: typeName
-			};
 		}
 
 		function _getNode(id, properties, entryPoints, factTypes) {
@@ -115,7 +97,7 @@ angular.module('umbraco.mocks').
 								{
 									label: 'Event Type',
 									description: "only types annotated with <code>@role(event)</code> are listed",
-									value: properties.factType && fullNameFromFactType(properties.factType),
+									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
 									view: "dropdown",
 									alias: "factType",
 									config: {
@@ -192,7 +174,7 @@ angular.module('umbraco.mocks').
 								{
 									label: 'Event Type',
 									description: "only types annotated with <code>@role(event)</code> are listed",
-									value: properties.factType && fullNameFromFactType(properties.factType),
+									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
 									view: "dropdown",
 									alias: "factType",
 									config: {
@@ -263,7 +245,7 @@ angular.module('umbraco.mocks').
 								{
 									label: 'Event Type',
 									description: "only types annotated with <code>@role(event)</code> are listed",
-									value: properties.factType && fullNameFromFactType(properties.factType),
+									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
 									view: "dropdown",
 									alias: "factType",
 									config: {

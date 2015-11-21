@@ -17,10 +17,7 @@ function sectionMocks($httpBackend, mocksUtils) {
             { name: "Rules", cssclass: "icon-script-alt", alias: "content" },
             { name: "Inputs", cssclass: "icon-window-popin", alias: "inputs" },
             { name: "Outputs", cssclass: "icon-out", alias: "outputs" },
-            { name: "Settings", cssclass: "icon-umb-settings", alias: "settings" },
-            { name: "Users", cssclass: "icon-umb-users", alias: "users" },
-            { name: "Developer", cssclass: "icon-umb-developer", alias: "developer" },
-            { name: "Users", cssclass: "icon-umb-users", alias: "users" }
+            { name: "Run", cssclass: "icon-power", alias: "deploy" }
         ];
         
         return [200, sections, null];

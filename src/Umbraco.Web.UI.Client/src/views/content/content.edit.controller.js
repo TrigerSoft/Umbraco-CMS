@@ -5,7 +5,10 @@
  */
 function ContentEditController($scope, $routeParams, $location, $q, $window, appState, contentResource, entityResource, navigationService, notificationsService, angularHelper, serverValidationManager, contentEditingHelper, fileManager, formHelper, umbModelMapper, editorState, localizationService, umbRequestHelper, $http) {
 
-    function init(content) {
+    function init(content, validate) {
+        
+        if (validate)
+            $scope.validate();
 
         var buttons = contentEditingHelper.configureContentEditorButtons({
             create: $routeParams.create,
@@ -21,16 +24,6 @@ function ContentEditController($scope, $routeParams, $location, $q, $window, app
         $scope.subButtons = buttons.subButtons;
 
         editorState.set($scope.content);
-
-        //We fetch all ancestors of the node to generate the footer breadcrumb navigation
-        if (!$routeParams.create) {
-            if (content.parentId && content.parentId != -1) {
-                entityResource.getAncestors(content.id, "document")
-                    .then(function (anc) {
-                        $scope.ancestors = anc;
-                    });
-            }
-        }
     }
     
     /** Syncs the content item to it's tree node - this occurs on first load and after saving */
@@ -73,13 +66,7 @@ function ContentEditController($scope, $routeParams, $location, $q, $window, app
                 $scope.loaded = true;
                 $scope.content = data;
 
-                if (data.isChildOfListView && data.trashed === false) {
-                    $scope.listViewPath = ($routeParams.page)
-                        ? "/content/content/edit/" + data.parentId + "?page=" + $routeParams.page
-                        : "/content/content/edit/" + data.parentId;
-                }
-
-                init($scope.content);
+                init($scope.content, true);
 
                 //in one particular special case, after we've created a new item we redirect back to the edit
                 // route but there might be server validation errors in the collection which we need to display

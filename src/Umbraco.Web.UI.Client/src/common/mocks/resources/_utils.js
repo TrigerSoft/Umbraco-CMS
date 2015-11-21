@@ -18,6 +18,24 @@ angular.module('umbraco.mocks').
         var mocksUtils = {
             remoteBaseUrl: remoteBaseUrl,
             idToPath: function(id) { return id.replace(/_/g, '/'); },
+            pathToId: function(path) { return path.replace(/\//g, '_'); },
+            fullNameFromFactType: function (factType) {
+                return factType.packageName + '.' + factType.typeName;
+            },
+
+            fullNameToFactType: function (fullName) {
+                var lastDot = fullName.lastIndexOf('.');
+                var packageName = null;
+                var typeName = fullName;
+                if (lastDot >= 0) {
+                    packageName = fullName.substr(0, lastDot);
+                    typeName = fullName.substr(lastDot + 1);
+                }
+                return {
+                    packageName: packageName,
+                    typeName: typeName
+                };
+            },
             getMockDataType: function(id, selectedId) {
                 var dataType = {
                     id: id,
