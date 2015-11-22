@@ -2,7 +2,7 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
 	return {
 		getDevContent: function () {
 			var content = {
-				name: "Summary &rarr;\u00BB Test \u21D2 Deploy",
+				name: "Test \u21D2 Deploy",
 				tabs: [
 					{
 						label: "Summary",
@@ -11,11 +11,34 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
 						properties: [
 							{
 								label: 'Rules',
-								value: "",
+								value: "rules",
 								view: "readonlylistview",
 								alias: "rules",
 								config: {
+									resource: "contentResource",
 									entityType: "content"
+								}
+							},
+							{
+								label: 'Inputs',
+								value: "inputs",
+								view: "readonlylistview",
+								alias: "inputs",
+								config: {
+									resource: "mediaResource",
+									section: "inputs",
+									entityType: "media"
+								}
+							},
+							{
+								label: 'Outputs',
+								value: "outputs",
+								view: "readonlylistview",
+								alias: "outputs",
+								config: {
+									resource: "mediaResource",
+									section: "outputs",
+									entityType: "media"
 								}
 							}
 						]

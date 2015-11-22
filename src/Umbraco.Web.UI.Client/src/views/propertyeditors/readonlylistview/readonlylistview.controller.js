@@ -1,10 +1,7 @@
 function readOnlyListViewController($scope, $injector) {
 
-    //Now we need to check if this is for media, members or content because that will depend on the resources we use
-    var contentResource, getListResultsCallback;
-
     var createEditUrlCallback = function (item) {
-        var link = "/" + $scope.entityType + "/" + $scope.entityType + "/edit/" + item.id + "?page=" + $scope.options.pageNumber;
+        var link = "/" + $scope.section + "/" + $scope.entityType + "/edit/" + item.id + "?page=" + $scope.options.pageNumber;
         if ($scope.options.editParam)
             link += "&" + $scope.options.editParam;
 
@@ -12,15 +9,11 @@ function readOnlyListViewController($scope, $injector) {
     };
 
     //check the config for the entity type, or the current section name (since the config is only set in c#, not in pre-vals)
-    if (($scope.model.config.entityType === "media")) {
-        $scope.entityType = "media";
-        contentResource = $injector.get('mediaResource');
-    }
-    else {
-        $scope.entityType = "content";
-        contentResource = $injector.get('contentResource');
-    }
-    getListResultsCallback = contentResource.getChildren;
+    var config = $scope.model.config;
+    $scope.entityType = config.entityType;
+    $scope.section = config.section || $scope.entityType;
+    var contentResource = $injector.get(config.resource); 
+    var getListResultsCallback = contentResource.getChildren;
 
     $scope.pagination = [];
     $scope.actionInProgress = false;
