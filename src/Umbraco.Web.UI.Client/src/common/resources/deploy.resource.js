@@ -6,7 +6,7 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
 				tabs: [
 					{
 						label: "Summary",
-						alias: "tab0",
+						alias: "summary",
 						id: 0,
 						properties: [
 							{
@@ -42,10 +42,37 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
 								}
 							}
 						]
+					},
+					{
+						label: "Test",
+						alias: "test",
+						id: 1,
+						properties: [
+							{
+								label: 'Outputs',
+								value: "outputs",
+								view: "tabview",
+								alias: "outputs",
+								config: {
+									resource: "mediaResource"
+								},
+								properties: [
+									{
+										hideLabel: true,
+										view: "readonlylistview",
+										alias: "results",
+										config: {
+											resource: "mediaResultsResource",
+											poll: true
+										}
+									}
+								]
+							}
+						]
 					}
 				]
 			};
-			
+
 			return $q.when(content);
 		}
 	};

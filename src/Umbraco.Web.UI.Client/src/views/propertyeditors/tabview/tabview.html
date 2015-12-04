@@ -1,0 +1,20 @@
+<div ng-controller="Umbraco.PropertyEditors.TabViewController">
+	<div class="row-fluid">
+		<ul class="nav nav-tabs umb-nav-tabs span12">
+			<li ng-class="{'tab-error': tabHasError}" ng-repeat="tab in tabs" val-tab>
+				<a href="#tab{{tab.id}}" data-toggle="tab">{{ tab.label }}</a>
+			</li>
+		</ul>
+	</div>
+	<div class="row-fluid">
+		<div class="tab-content form-horizontal">
+			<umb-tab id="tab{{tab.id}}" rel="{{tab.id}}" ng-repeat="tab in tabs">
+				<div style="margin-top:30px">
+					<umb-property property="property" ng-repeat="property in tab.properties">
+						<umb-editor model="property"></umb-editor>
+					</umb-property>
+				</div>
+			</umb-tab>
+		</div>
+	</div>
+</div>

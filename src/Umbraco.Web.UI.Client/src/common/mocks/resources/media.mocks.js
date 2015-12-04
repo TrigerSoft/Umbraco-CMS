@@ -14,7 +14,7 @@ angular.module('umbraco.mocks').
       var properties;
       if (id) {
         properties = $.ajax({
-          url: mocksUtils.remoteBaseUrl + section + "/" + id.replace(/_/g, '/'),
+          url: mocksUtils.remoteBaseUrl + section + "/" + mocksUtils.idToPath(id),
           dataType: 'json',
           type: 'GET'
         }).then(_.identity);
@@ -100,7 +100,7 @@ angular.module('umbraco.mocks').
       var section = $injector.get('$routeParams').section;
 
       return $.ajax({
-        url: mocksUtils.remoteBaseUrl + section + "/" + id.replace(/_/g, '/'),
+        url: mocksUtils.remoteBaseUrl + section + "/" + mocksUtils.idToPath(id),
         type: 'DELETE'
       }).then(function () {
         return [200, null, null];
@@ -110,12 +110,38 @@ angular.module('umbraco.mocks').
 
 
     }
-    
+
+    function returnResults(method, url, data, headers) {
+      if (!mocksUtils.checkAuth()) {
+        return $.when([401, null, null]);
+      }
+
+      var id = mocksUtils.getParameterByName(url, "id");
+
+      return $.ajax({
+        url: mocksUtils.remoteBaseUrl + "test/results/" + mocksUtils.idToPath(id),
+        type: 'GET'
+      }).then(function (messages) {
+        if (!messages || !messages.length)
+          return [200, { pageSize: 10, totalItems: 0, totalPages: 1, includeProperties: [] }, null];
+        var collection = { pageSize: 10, items: messages, totalItems: messages.length, totalPages: 1, pageNumber: 1 };
+
+        collection.includeProperties = _.map(_.keys(messages[0]), function (key) {
+          return {
+            alias: key,
+            header: key
+          };
+        });
+
+        return [200, collection, null];
+      });
+    }
+
     function returnSummary(method, url, data, headers) {
       if (!mocksUtils.checkAuth()) {
         return $.when([401, null, null]);
       }
-      
+
       var section = mocksUtils.getParameterByName(url, "id");
 
       return $.ajax({
@@ -123,20 +149,13 @@ angular.module('umbraco.mocks').
         type: 'GET'
       }).then(function (messages) {
         if (!messages || !messages.length)
-          return [200, { pageSize: 10, totalItems: 0, totalPages: 0, includeProperties: [] }, null];
+          return [200, { pageSize: 10, totalItems: 0, totalPages: 1, includeProperties: [] }, null];
         var collection = { pageSize: 10, items: messages, totalItems: messages.length, totalPages: 1, pageNumber: 1 };
-        
-        _.each(messages, function(m) {
+
+        _.each(messages, function (m) {
           m.id = m.type + '_' + m.id;
         });
-        
-        collection.includeProperties = _.map(_.keys(messages[0]), function(key) {
-          return {
-             alias: key,
-             header: key
-          };
-        });
-        
+
         collection.includeProperties = [
           {
             alias: "name",
@@ -170,9 +189,13 @@ angular.module('umbraco.mocks').
         //  .respond(returnNodebyIds);
                             
         $httpBackend
-         .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/GetChildren'))
-         .respond(returnSummary);
-              
+          .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/GetChildren'))
+          .respond(returnSummary);
+          
+        $httpBackend
+          .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/GetResults'))
+          .respond(returnResults);
+
         $httpBackend
           .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/GetEmpty'))
           .respond(returnEmptyNode);
@@ -222,7 +245,7 @@ angular.module('umbraco.mocks').
 
             var type = create ? "POST" : "PUT";
             var url = mocksUtils.remoteBaseUrl + section + '/';
-            url += create ? inputType : payLoad.value.id.replace(/_/g, '/');
+            url += create ? inputType : mocksUtils.idToPath(payLoad.value.id);
 
             var ajax = {
               url: url,
