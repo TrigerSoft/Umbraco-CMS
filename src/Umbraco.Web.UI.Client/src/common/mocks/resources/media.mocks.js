@@ -110,6 +110,19 @@ angular.module('umbraco.mocks').
 
 
     }
+    
+    function runTest(method, url, data, headers) {
+      if (!mocksUtils.checkAuth()) {
+        return $.when([401, null, null]);
+      }
+
+      var seconds = mocksUtils.getParameterByName(url, "seconds");
+
+      return $.ajax({
+        url: mocksUtils.remoteBaseUrl + "test/test?seconds=" + seconds,
+        type: 'POST'
+      });
+    }
 
     function returnResults(method, url, data, headers) {
       if (!mocksUtils.checkAuth()) {
@@ -195,6 +208,10 @@ angular.module('umbraco.mocks').
         $httpBackend
           .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/GetResults'))
           .respond(returnResults);
+          
+        $httpBackend
+          .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/Test'))
+          .respond(runTest);
 
         $httpBackend
           .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/GetEmpty'))

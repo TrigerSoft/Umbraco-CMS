@@ -6,4 +6,7 @@
 declare module angular {
 	interface IScopeService extends IScope {
 	}
+	
+	interface IElementService extends IAugmentedJQuery {
+	}
 }

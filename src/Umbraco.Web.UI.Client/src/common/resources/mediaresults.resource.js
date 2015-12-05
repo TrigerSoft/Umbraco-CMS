@@ -1,4 +1,4 @@
-function mediaResultsResource($q, $http, umbDataFormatter, umbRequestHelper) {
+function mediaResultsResource($http, umbDataFormatter, umbRequestHelper) {
     return {
         getChildren: function (parentId) {
 

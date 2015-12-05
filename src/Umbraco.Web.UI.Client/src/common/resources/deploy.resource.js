@@ -74,7 +74,19 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
 			};
 
 			return $q.when(content);
-		}
+		},
+        test: function (seconds) {
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "mediaApiBaseUrl",
+                        "Test",
+                        [
+                            { seconds: seconds }
+                        ])),
+                'Failed to run test');
+        }
 	};
 }
 
