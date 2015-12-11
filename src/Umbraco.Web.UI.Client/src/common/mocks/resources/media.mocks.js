@@ -121,6 +121,8 @@ angular.module('umbraco.mocks').
       return $.ajax({
         url: mocksUtils.remoteBaseUrl + "test/test?seconds=" + seconds,
         type: 'POST'
+      }).then(function (testId) {
+        return [200, testId, null];
       });
     }
 
@@ -135,18 +137,7 @@ angular.module('umbraco.mocks').
         url: mocksUtils.remoteBaseUrl + "test/results/" + mocksUtils.idToPath(id),
         type: 'GET'
       }).then(function (messages) {
-        if (!messages || !messages.length)
-          return [200, { pageSize: 10, totalItems: 0, totalPages: 1, includeProperties: [] }, null];
-        var collection = { pageSize: 10, items: messages, totalItems: messages.length, totalPages: 1, pageNumber: 1 };
-
-        collection.includeProperties = _.map(_.keys(messages[0]), function (key) {
-          return {
-            alias: key,
-            header: key
-          };
-        });
-
-        return [200, collection, null];
+        return [200, messages, null];
       });
     }
 

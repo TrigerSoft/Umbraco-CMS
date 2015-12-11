@@ -25,18 +25,33 @@ function DeployEditController($scope, $element, $routeParams, deployResource, no
 
         });
 
+    $scope.$watch(function () {
+        return $scope.content.tabs[1].properties[1].value;
+    }, function (testing) {
+        $scope.testing = testing;
+    });
+
     $scope.test = function () {
 
         if ($scope.busy)
             return;
-        
+
         $scope.busy = true;
-        
+
         deployResource.test(10).then(function () {
             //use bootstrap tabs API to show the tab
             $element.find(".nav-tabs a[href='#tab1']").tab('show');
+            _.each($scope.content.tabs[1].properties, function (p) {
+                p.value = true;
+            });
         }).always(function () {
             $scope.busy = false;
+        });
+    };
+
+    $scope.stopTest = function () {
+        _.each($scope.content.tabs[1].properties, function (p) {
+            p.value = false;
         });
     };
 }

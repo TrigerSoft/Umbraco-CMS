@@ -12,7 +12,7 @@ function readOnlyListViewController($scope, $injector) {
     var config = $scope.model.config;
     $scope.entityType = config.entityType;
     $scope.section = config.section || $scope.entityType;
-    var contentResource = $injector.get(config.resource); 
+    var contentResource = $injector.get(config.resource);
     var getListResultsCallback = contentResource.getChildren;
 
     $scope.pagination = [];
@@ -93,6 +93,8 @@ function readOnlyListViewController($scope, $injector) {
     with simple values */
 
     $scope.reloadView = function (id) {
+        if (config.poll)
+            return;
         $scope.actionInProgress = true;
         getListResultsCallback(id, $scope.options).then(function (data) {
 

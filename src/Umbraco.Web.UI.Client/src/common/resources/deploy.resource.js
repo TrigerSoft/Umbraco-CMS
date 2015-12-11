@@ -59,6 +59,7 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
 								properties: [
 									{
 										hideLabel: true,
+										value: false,
 										view: "readonlylistview",
 										alias: "results",
 										config: {
@@ -67,6 +68,14 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
 										}
 									}
 								]
+							},
+							{
+								label: 'Log',
+								value: false,
+								view: "log",
+								alias: "log",
+								config: {
+								}
 							}
 						]
 					}

@@ -78,6 +78,13 @@ angular.module('umbraco.mocks').
 									alias: "connectionString"
 								},
 								{
+									label: 'Path',
+									description: "Name of the Event Hub in portal.",
+									value: properties.path,
+									view: "textbox",
+									alias: "path"
+								},
+								{
 									label: 'Consumer Group',
 									description: "Event Hubs limit the number of readers within one consumer group (to 5). We recommend using a separate group for each job. Leaving this field empty will use the '$Default' consumer group.",
 									value: properties.consumerGroup,
