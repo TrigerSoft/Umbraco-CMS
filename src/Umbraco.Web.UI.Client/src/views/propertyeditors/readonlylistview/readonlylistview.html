@@ -13,6 +13,14 @@
                     </td>
                 </tr>
             </thead>
+            
+            <tbody ng-hide="listViewResultSet">
+                <tr>
+                    <td>
+                        <img src="assets/img/loader.gif" />
+                    </td>
+                </tr>
+            </tbody>
 
             <tbody ng-show="listViewResultSet.totalItems === 0">
                 <tr>

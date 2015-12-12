@@ -17,10 +17,6 @@ function readOnlyListViewController($scope, $injector) {
 
     $scope.pagination = [];
     $scope.actionInProgress = false;
-    $scope.listViewResultSet = {
-        totalPages: 0,
-        items: []
-    };
 
     $scope.options = {
         pageSize: $scope.model.config.pageSize || 10,
