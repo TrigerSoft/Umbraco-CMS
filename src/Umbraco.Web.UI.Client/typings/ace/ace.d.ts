@@ -114,6 +114,7 @@ declare module AceAjax {
          * @param moduleName
         **/
         require(moduleName: string): any;
+        require(moduleName: 'ace/range'): {Range: RangeConstructor};
 
         /**
          * Embeds the Ace editor into the DOM, at the element provided by `el`.
@@ -352,7 +353,7 @@ declare module AceAjax {
          * @param row The index of the row to insert at
          * @param lines An array of strings
         **/
-        insertLines(row: number, lines: string[]): any;
+        insertFullLines(row: number, lines: string[]): any;
 
         /**
          * Inserts a new line into the document at the current row's `position`. This method also triggers the `'change'` event.
@@ -1836,6 +1837,11 @@ declare module AceAjax {
     ////////////////
     /// Range
     ////////////////
+    
+    export interface RangeConstructor {
+        fromPoints(pos1: Position, pos2: Position): Range;
+        new(startRow: number, startColumn: number, endRow: number, endColumn: number): Range;
+    }
 
     /**
      * This object is used in various places to indicate a region within the editor. To better visualize how this works, imagine a rectangle. Each quadrant of the rectangle is analogus to a range, as ranges contain a starting row and starting column, and an ending row, and ending column.
@@ -2032,10 +2038,7 @@ declare module AceAjax {
      * @param endRow The ending row
      * @param endColumn The ending column
     **/
-    var Range: {
-        fromPoints(pos1: Position, pos2: Position): Range;
-        new(startRow: number, startColumn: number, endRow: number, endColumn: number): Range;
-    }
+    var Range: RangeConstructor;
 
     ////////////////
     /// RenderLoop
