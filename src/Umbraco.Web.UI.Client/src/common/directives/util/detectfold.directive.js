@@ -36,9 +36,9 @@ angular.module("umbraco.directives.html")
                             // (based on the nav-resize directive)
 			                var wrapper = $("#mainwrapper");
 			                var contentPanel = $("#leftcolumn").next();
-			                var contentPanelLeftPx = contentPanel.css("left");
+			                var contentPanelPos = contentPanel.position();
 
-			                el.css({ left: contentPanelLeftPx });
+			                el.css({ left: contentPanelPos.left + 20 });
 			            }
 			        }
 			        return firstRun;

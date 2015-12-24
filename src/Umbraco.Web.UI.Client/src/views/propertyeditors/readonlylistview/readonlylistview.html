@@ -14,18 +14,18 @@
                 </tr>
             </thead>
             
-            <tbody ng-hide="listViewResultSet">
+            <tbody ng-show="actionInProgress">
                 <tr>
-                    <td>
+                    <td colspan="{{options.includeProperties.length}}">
                         <img src="assets/img/loader.gif" />
                     </td>
                 </tr>
             </tbody>
 
-            <tbody ng-show="listViewResultSet.totalItems === 0">
+            <tbody ng-hide="actionInProgress || listViewResultSet.totalItems">
                 <tr>
                     <td colspan="{{options.includeProperties.length}}">
-                        <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
+                        <p style="text-align:center"><localize key="content_listViewNoItems">NO DATA</localize></p>
                     </td>
                 </tr>
             </tbody>
@@ -44,26 +44,26 @@
             <tfoot ng-show="pagination.length > 1">
                 <tr>
                     <th colspan="{{options.includeProperties.length}}">
-                        <div class="pull-left">
+                        <div class="pull-left" ng-if="moreResults">Showing the first {{listViewResultSet.totalPages*listViewResultSet.pageSize}} results
                         </div>
                         <div class="pagination pagination-right">
                             <ul>
-                                <li ng-class="{disabled:options.pageNumber <= 1}">
+                                <li ng-class="{disabled:!options.pageNumber}">
                                     <a href="#" ng-click="prev()" prevent-default>
                                         <localize key="general_previous">Previous</localize>
                                     </a>
                                 </li>
 
                                 <li ng-repeat="pgn in pagination"
-                                    ng-class="{active:pgn.isActive}">
+                                    ng-class="{active:pgn.val===options.pageNumber}">
 
-                                    <a href="#" ng-click="goToPage(pgn.val - 1)" prevent-default
-                                       ng-bind="pgn.name ? pgn.name : pgn.val"
+                                    <a href="#" ng-click="goToPage(pgn.val)" prevent-default
+                                       ng-bind="pgn.name || pgn.val + 1"
                                        ng-if="pgn.val != '...'"></a>
                                     <span ng-bind="pgn.val" ng-if="pgn.val == '...'"></span>
                                 </li>
 
-                                <li ng-class="{disabled:options.pageNumber >= listViewResultSet.totalPages}">
+                                <li ng-class="{disabled:options.pageNumber >= listViewResultSet.totalPages-1}">
                                     <a href="#" ng-click="next()" prevent-default>
                                         <localize key="general_next">Next</localize>
                                     </a>

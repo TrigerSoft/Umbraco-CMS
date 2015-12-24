@@ -1,19 +1,21 @@
 function mediaResultsResource($http, $q, umbDataFormatter, umbRequestHelper) {
 
-    function doPoll(id, callback) {
+    function doPoll(id, runId, callback) {
         var canceler = $q.defer();
         var stopped;
         function poll() {
             if (stopped)
                 return;
+            // console.log("poll:" + id);
             $http.get(
                 umbRequestHelper.getApiUrl(
                     "mediaApiBaseUrl",
                     "GetResults",
                     [
-                        { id: id }
+                        { id: id }, { runId: runId }
                     ]), { timeout: canceler.promise })
                 .then(function (result) {
+                    // console.log("poll returned:" + id);
                     var messages = result.data;
                     if (!messages || !messages.length) {
                         poll();
@@ -21,13 +23,23 @@ function mediaResultsResource($http, $q, umbDataFormatter, umbRequestHelper) {
                     }
 
                     var parsed = _.map(messages, function (m) {
-                        return angular.fromJson(m);
+
+                        var removed = m && (m[0] === '-');
+                        if (removed)
+                            m = m.substr(1);
+                        var x = angular.fromJson(m);
+                        if (removed)
+                            x._removed_ = true;
+                        return x;
                     });
 
                     var ni = parsed.indexOf(null);
                     var end = ni >= 0;
-                    if (end)
+                    if (end) {
+                        // console.log("end:" + id);
+                        console.log(messages);
                         parsed.splice(ni, 1)
+                    }
 
                     callback(parsed);
 
@@ -47,15 +59,15 @@ function mediaResultsResource($http, $q, umbDataFormatter, umbRequestHelper) {
     }
 
     return {
-        getChildren: function ($scope, eventName, parentId) {
+        pollChildren: function ($scope, eventName, parentId, runId) {
 
-            return doPoll(parentId, function (messages) {
+            return doPoll(parentId, runId, function (messages) {
 
                 if (!messages || !messages.length) {
-                    $scope.$broadcast(eventName, { pageSize: 10, totalItems: 0, totalPages: 1, includeProperties: [] });
+                    $scope.$broadcast(eventName, null);
                     return;
                 }
-                var collection = { pageSize: 10, items: messages, totalItems: messages.length, totalPages: 1, pageNumber: 1 };
+                var collection = { pageSize: 10, pageNumber: 1, items: messages };
 
                 collection.includeProperties = _.map(_.keys(messages[0]), function (key) {
                     return {
@@ -63,12 +75,13 @@ function mediaResultsResource($http, $q, umbDataFormatter, umbRequestHelper) {
                         header: key
                     };
                 });
+
                 $scope.$broadcast(eventName, collection);
             });
         },
-        pollLog: function ($scope, eventName) {
+        pollLog: function ($scope, eventName, runId) {
 
-            return doPoll("log/log", function (messages) {
+            return doPoll("log/log", runId, function (messages) {
                 $scope.$broadcast(eventName, messages);
             });
         }

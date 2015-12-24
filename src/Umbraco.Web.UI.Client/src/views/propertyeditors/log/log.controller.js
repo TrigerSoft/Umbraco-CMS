@@ -15,14 +15,15 @@ function LogEditorController($scope, $element, assetsService, mediaResultsResour
             editor.setHighlightActiveLine(false);
             editor.setShowPrintMargin(false);
             editor.setReadOnly(true);
+            editor.$blockScrolling = Infinity;
             //editor.getSession().setMode("ace/mode/drools");
             // editor.setOption("minLines", 5);
             editor.setOption("maxLines", 1000);
             editor.setTheme("ace/theme/crimson_editor");
-            
+
             var session = editor.getSession();
             session.setUseWrapMode(true);
-            
+
             var Range = ace.require('ace/range').Range;
             var rowToInsert;
             var annotations;
@@ -30,14 +31,16 @@ function LogEditorController($scope, $element, assetsService, mediaResultsResour
             $scope.$on("add-logs", function (e, entries) {
                 // console.log("got logs:" + entries);
                 if (!entries) {
-                    $scope.model.value = false;
+                    $scope.$emit("end-logging");
                     return;
                 }
-                
+
                 var doc = session.getDocument();
 
                 _.each(entries, function (e) {
                     var line = e.value;
+                    if (e.partitionId)
+                        line = "(" + e.partitionId + ") " + line;
                     doc.insertFullLines(rowToInsert, [line]);
 
                     if (e.description) {
@@ -54,29 +57,33 @@ function LogEditorController($scope, $element, assetsService, mediaResultsResour
 
                     rowToInsert++;
                 });
+                
+                $scope.$root.$emit("window-resize");
             });
 
             var unsubscribe;
 
-            function poll(value) {
+            function poll(runId) {
                 if (unsubscribe) {
                     unsubscribe();
                     unsubscribe = null;
                 }
-                if (value) {
+                if (runId) {
                     rowToInsert = 0;
                     annotations = [];
-                    _.each(markers, function(m) {
-                       session.removeMarker(m); 
+                    _.each(markers, function (m) {
+                        session.removeMarker(m);
                     });
                     markers = [];
                     session.clearAnnotations();
                     editor.setValue("");
-                    unsubscribe = mediaResultsResource.pollLog($scope, "add-logs");
+                    unsubscribe = mediaResultsResource.pollLog($scope, "add-logs", runId);
                 }
             }
 
-            $scope.$watch("model.value", poll);
+            $scope.$on("set-value", function(e, runId) {
+                poll(runId);
+            });
             $scope.$on("$destroy", poll.bind(this, false));
 
         });

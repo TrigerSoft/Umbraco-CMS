@@ -27,6 +27,9 @@ function windowResizeListener($rootScope) {
                 }
             });
         };
+        
+        $rootScope.$on("window-resize", resize);
+        
         return {
             register: function (fn) {
                 registered.push(fn);

@@ -8,7 +8,7 @@ function tabViewController($scope, $element, $timeout, $injector) {
         $scope.tabs = _.map(tabs, function (tab, index) {
             var properties = _.map($scope.model.properties, function (prop) {
                 prop = _.clone(prop);
-                prop.value = tab.id;
+                prop.config.contentId = tab.id;
                 return prop;
             });
             return {
@@ -17,6 +17,14 @@ function tabViewController($scope, $element, $timeout, $injector) {
                 id: tab.id,
                 properties: properties
             };
+        });
+
+        $scope.$on("set-value", function (e, value) {
+            _.each($scope.tabs, function (tab) {
+                _.each(tab.properties, function (p) {
+                    p.value = value;
+                });
+            });
         });
         
         //we need to do a timeout here so that the current sync operation can complete
@@ -27,12 +35,12 @@ function tabViewController($scope, $element, $timeout, $injector) {
             $element.find(".nav-tabs a:first").tab('show');
 
             //enable the tab drop
-            $element.find('.nav-pills, .nav-tabs').tabdrop();
+           // $element.find('.nav-pills, .nav-tabs').tabdrop();
 
             //ensure to destroy tabdrop (unbinds window resize listeners)
-            $scope.$on('$destroy', function () {
-                $element.find('.nav-pills, .nav-tabs').tabdrop("destroy");
-            });
+            //$scope.$on('$destroy', function () {
+            //    $element.find('.nav-pills, .nav-tabs').tabdrop("destroy");
+            //});
 
         }, 200, false);
     });

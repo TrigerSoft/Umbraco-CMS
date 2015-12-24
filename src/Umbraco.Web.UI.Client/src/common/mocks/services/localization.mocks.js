@@ -125,7 +125,7 @@ angular.module('umbraco.mocks').
                   "content_itemChanged": "This item has been changed after publication",
                   "content_itemNotPublished": "This item is not published",
                   "content_lastPublished": "Last published",
-                  "content_listViewNoItems": "There are no items show in the list.",
+                  "content_listViewNoItems": "NO DATA",
                   "content_mediatype": "Media Type",
                   "content_mediaLinks": "Link to media item(s)",
                   "content_membergroup": "Member Group",

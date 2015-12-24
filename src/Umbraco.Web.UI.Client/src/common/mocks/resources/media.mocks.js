@@ -132,9 +132,10 @@ angular.module('umbraco.mocks').
       }
 
       var id = mocksUtils.getParameterByName(url, "id");
+      var runId = mocksUtils.getParameterByName(url, "runId");
 
       return $.ajax({
-        url: mocksUtils.remoteBaseUrl + "test/results/" + mocksUtils.idToPath(id),
+        url: mocksUtils.remoteBaseUrl + "test/results/" + mocksUtils.idToPath(id) + "/" + runId,
         type: 'GET'
       }).then(function (messages) {
         return [200, messages, null];
