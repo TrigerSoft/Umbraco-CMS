@@ -17,7 +17,7 @@ function sectionMocks($httpBackend, mocksUtils) {
             { name: "Rules", cssclass: "icon-script-alt", alias: "content" },
             { name: "Inputs", cssclass: "icon-window-popin", alias: "inputs" },
             { name: "Outputs", cssclass: "icon-out", alias: "outputs" },
-            { name: "Run", cssclass: "icon-power", alias: "deploy" }
+            { name: "Run", cssclass: "icon-power", alias: "run" }
         ];
         
         return [200, sections, null];

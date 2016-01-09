@@ -84,6 +84,7 @@ angular.module('umbraco.mocks').
                   "buttons_relations": "Edit relations",
                   "buttons_save": "Save",
                   "buttons_test": "Test",
+                  "buttons_deploy": "Deploy",
                   "buttons_saveAndPublish": "Save and publish",
                   "buttons_saveToPublish": "Save and send for approval",
                   "buttons_showPage": "Preview",

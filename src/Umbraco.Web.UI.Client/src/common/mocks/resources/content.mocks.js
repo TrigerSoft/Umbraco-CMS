@@ -56,7 +56,7 @@ angular.module('umbraco.mocks').
       }
 
       return $.ajax({
-        url: mocksUtils.remoteBaseUrl + "test/summary/rules",
+        url: mocksUtils.remoteBaseUrl + "run/summary/rules",
         type: 'GET'
       }).then(function (messages) {
         if (!messages || !messages.length)
@@ -243,7 +243,7 @@ angular.module('umbraco.mocks').
     function validate(node, saved) {
       var type = saved ? "GET" : "POST";
       var path = mocksUtils.idToPath(node.id || "NEW");
-      var remoteUrl = mocksUtils.remoteBaseUrl + 'test/compile?path=' + path;
+      var remoteUrl = mocksUtils.remoteBaseUrl + 'run/compile?path=' + path;
 
       var ajax = {
         url: remoteUrl,

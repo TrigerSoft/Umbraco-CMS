@@ -3,7 +3,7 @@
  * @name Umbraco.Editors.Content.EditController
  * @function
  */
-function DeployEditController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState) {
+function TestEditController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState) {
 
     function init(content) {
         editorState.set($scope.content);
@@ -55,4 +55,4 @@ function DeployEditController($scope, $element, $routeParams, deployResource, no
     };
 }
 
-angular.module("umbraco").controller("Umbraco.Editors.Deploy.EditController", DeployEditController);
+angular.module("umbraco").controller("Umbraco.Editors.Run.TestController", TestEditController);

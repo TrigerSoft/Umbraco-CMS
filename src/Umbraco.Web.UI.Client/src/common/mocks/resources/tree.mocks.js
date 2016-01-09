@@ -121,9 +121,7 @@ angular.module('umbraco.mocks').
                             name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
                               { name: "Fact Types", childNodesUrl: "/debug/logic/models", id: "models", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl },
                               { name: "Rules", childNodesUrl: "/debug/logic/rules", id: "rules", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl }
-                          ], expanded: true, hasChildren: true, level: 1 },
-                          { 
-                            name: "Production", id: -3, parentId: -1, icon: "icon-globe-alt", children: [], expanded: false, hasChildren: true, level: 1 }
+                          ], expanded: true, hasChildren: true, level: 1 }
                       ],
                       expanded: true,
                       hasChildren: true,
@@ -144,14 +142,6 @@ angular.module('umbraco.mocks').
                                   { name: "Table Storage", childNodesUrl: "/debug/inputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
                                   { name: "Blob Storage", childNodesUrl: "/debug/inputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
                               ], expanded: true, hasChildren: true, level: 1
-                          },
-                          {
-                              name: "Production", id: -3, parentId: -1, icon: "icon-globe-alt", children: [
-                                  { name: "Event Hubs", childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
-                                  { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
-                                  { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
-                                  { name: "random-name-" + section, childNodesUrl: url, id: 1237, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl }
-                              ], expanded: false, hasChildren: true, level: 1
                           }
                       ],
                       expanded: true,
@@ -173,14 +163,6 @@ angular.module('umbraco.mocks').
                                   { name: "Table Storage", childNodesUrl: "/debug/outputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
                                   { name: "Blob Storage", childNodesUrl: "/debug/outputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
                               ], expanded: true, hasChildren: true, level: 1
-                          },
-                          {
-                              name: "Production", id: -3, icon: "icon-globe-alt", children: [
-                                  { name: "Event Hubs", childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
-                                  { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
-                                  { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl },
-                                  { name: "random-name-" + section, childNodesUrl: url, id: 1237, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, menuUrl: menuUrl }
-                              ], expanded: false, hasChildren: true, level: 1
                           }
                       ],
                       expanded: true,
@@ -191,18 +173,20 @@ angular.module('umbraco.mocks').
                   };
 
                   break;
-               case "deploy":
+               case "run":
                   t = {
-                      name: "deploy",
+                      name: "run",
                       id: -1,
                       children: [
-                          { name: "Development", id: -1, icon: "icon-home", children: [], expanded: false, hasChildren: false, level: 1},
-                          { name: "Production", id: -2, icon: "icon-globe-alt", children: [], expanded: false, hasChildren: false, level: 1},
+                          { name: "Test", id: "test", icon: "icon-home", children: [], expanded: false, hasChildren: false, level: 1},
+                          { name: "Deploy", id: "deploy", icon: "icon-home", children: [], expanded: false, hasChildren: false, level: 1, routePath: "run/run/deploy/deploy"},
+                          { name: "Production", id: "production", icon: "icon-globe-alt", children: [], expanded: false, hasChildren: false, level: 1}
                       ],
                       expanded: true,
                       hasChildren: true,
                       level: 0,
-                      metaData: { treeAlias: "deploy" }
+                      isContainer: true,
+                      metaData: {treeAlias: "run"}
                   };
                   
                   break;

@@ -119,10 +119,62 @@ angular.module('umbraco.mocks').
       var seconds = mocksUtils.getParameterByName(url, "seconds");
 
       return $.ajax({
-        url: mocksUtils.remoteBaseUrl + "test/test?seconds=" + seconds,
+        url: mocksUtils.remoteBaseUrl + "run/test?seconds=" + seconds,
         type: 'POST'
       }).then(function (testId) {
         return [200, testId, null];
+      });
+    }
+    
+    function go(method, url, data, headers) {
+      if (!mocksUtils.checkAuth()) {
+        return $.when([401, null, null]);
+      }
+
+      return $.ajax({
+        url: mocksUtils.remoteBaseUrl + "run/start",
+        type: 'POST'
+      }).then(function () {
+        return [200, null, null];
+      });
+    }
+    
+    function stop(method, url, data, headers) {
+      if (!mocksUtils.checkAuth()) {
+        return $.when([401, null, null]);
+      }
+
+      return $.ajax({
+        url: mocksUtils.remoteBaseUrl + "run/stop",
+        type: 'POST'
+      }).then(function () {
+        return [200, null, null];
+      });
+    }
+    
+    function saveRuntimeParameters(method, url, data, headers) {
+      if (!mocksUtils.checkAuth()) {
+        return $.when([401, null, null]);
+      }
+
+      return $.ajax({
+        url: mocksUtils.remoteBaseUrl + "run/params",
+        type: 'POST'
+      }).then(function () {
+        return [200, null, null];
+      });
+    }
+    
+    function returnRuntimeParameters(method, url, data, headers) {
+      if (!mocksUtils.checkAuth()) {
+        return $.when([401, null, null]);
+      }
+
+      return $.ajax({
+        url: mocksUtils.remoteBaseUrl + "run/params",
+        type: 'GET'
+      }).then(function (data) {
+        return [200, data, null];
       });
     }
 
@@ -135,7 +187,7 @@ angular.module('umbraco.mocks').
       var runId = mocksUtils.getParameterByName(url, "runId");
 
       return $.ajax({
-        url: mocksUtils.remoteBaseUrl + "test/results/" + mocksUtils.idToPath(id) + "/" + runId,
+        url: mocksUtils.remoteBaseUrl + "run/results/" + mocksUtils.idToPath(id) + "/" + runId,
         type: 'GET'
       }).then(function (messages) {
         return [200, messages, null];
@@ -150,7 +202,7 @@ angular.module('umbraco.mocks').
       var section = mocksUtils.getParameterByName(url, "id");
 
       return $.ajax({
-        url: mocksUtils.remoteBaseUrl + "test/summary/" + section,
+        url: mocksUtils.remoteBaseUrl + "run/summary/" + section,
         type: 'GET'
       }).then(function (messages) {
         if (!messages || !messages.length)
@@ -204,6 +256,22 @@ angular.module('umbraco.mocks').
         $httpBackend
           .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/Test'))
           .respond(runTest);
+        
+        $httpBackend
+          .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/Run/Params'))
+          .respond(saveRuntimeParameters);
+          
+        $httpBackend
+          .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/Run/Params'))
+          .respond(returnRuntimeParameters);
+          
+        $httpBackend
+          .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/Run'))
+          .respond(go);
+          
+        $httpBackend
+          .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/Stop'))
+          .respond(stop);
 
         $httpBackend
           .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/GetEmpty'))
