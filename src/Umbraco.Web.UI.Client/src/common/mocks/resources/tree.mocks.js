@@ -38,7 +38,7 @@ angular.module('umbraco.mocks').
 
             return [200, result, null];
         }
-        
+
         function getCreateMenuItems() {
 
             if (!mocksUtils.checkAuth()) {
@@ -55,6 +55,39 @@ angular.module('umbraco.mocks').
             };
 
             return [200, result, null];
+        }
+
+        function getIO(dir) {
+
+            var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetLeafMenu";
+
+            return $.ajax({
+                url: mocksUtils.remoteBaseUrl + dir,
+                dataType: 'json',
+                type: 'GET'
+            }).then(function (items) {
+                var children = _.map(items, function (item) {
+                    return {
+                        id: item.type + '_' + item.id,
+                        name: item.name,
+                        icon: dir === "inputs" ? "icon-window-popin" : "icon-out",
+                        detail: item.type.replace(/[A-Z]/g, function (capital) {
+                            return " " + capital;
+                        }),
+                        children: [],
+                        expanded: false,
+                        hasChildren: false,
+                        level: 1,
+                        menuUrl: menuUrl
+                    };
+                });
+
+                children.sort(function (a, b) {
+                    return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
+                });
+
+                return children;
+            });
         }
 
         function returnChildren(status, data, headers) {
@@ -121,7 +154,7 @@ angular.module('umbraco.mocks').
         function returnApplicationTrees(status, data, headers) {
 
             if (!mocksUtils.checkAuth()) {
-                return [401, null, null];
+                return $.when([401, null, null]);
             }
 
             var section = mocksUtils.getParameterByName(data, "application");
@@ -147,45 +180,37 @@ angular.module('umbraco.mocks').
 
                     break;
                 case "inputs":
-                    t = {
-                        name: "inputs",
-                        id: -1,
-                        children: [
-                            {
-                                name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
-                                    { name: "Event Hubs", childNodesUrl: "/debug/inputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                    { name: "Table Storage", childNodesUrl: "/debug/inputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                    { name: "Blob Storage", childNodesUrl: "/debug/inputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
-                                ], expanded: true, hasChildren: true, level: 1
-                            }
-                        ],
-                        expanded: true,
-                        hasChildren: true,
-                        level: 0,
-                        //menuUrl: menuUrl,
-                        metaData: { treeAlias: "media" }
-                    };
+                    t = getIO("inputs").then(function (children) {
+
+                        return {
+                            name: "inputs",
+                            childNodesUrl: "/debug/inputs",
+                            id: -1,
+                            children: children,
+                            expanded: true,
+                            hasChildren: true,
+                            level: 0,
+                            menuUrl: menuUrl,
+                            metaData: { treeAlias: "media" }
+                        };
+                    });
 
                     break;
                 case "outputs":
-                    t = {
-                        name: "outputs",
-                        id: -1,
-                        children: [
-                            {
-                                name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
-                                    { name: "Event Hubs", childNodesUrl: "/debug/outputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                    { name: "Table Storage", childNodesUrl: "/debug/outputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                    { name: "Blob Storage", childNodesUrl: "/debug/outputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
-                                ], expanded: true, hasChildren: true, level: 1
-                            }
-                        ],
-                        expanded: true,
-                        hasChildren: true,
-                        level: 0,
-                        //menuUrl: menuUrl,
-                        metaData: { treeAlias: "media" }
-                    };
+                    t = getIO("outputs").then(function (children) {
+
+                        return {
+                            name: "outputs",
+                            childNodesUrl: "/debug/outputs",
+                            id: -1,
+                            children: children,
+                            expanded: true,
+                            hasChildren: true,
+                            level: 0,
+                            menuUrl: menuUrl,
+                            metaData: { treeAlias: "media" }
+                        };
+                    });
 
                     break;
                 case "run":
@@ -193,9 +218,9 @@ angular.module('umbraco.mocks').
                         name: "run",
                         id: -1,
                         children: [
-                            { name: "Test", id: "test", icon: "icon-check", children: [], expanded: false, hasChildren: false, level: 1 },
-                            { name: "Deploy", id: "deploy", icon: "icon-rocket", children: [], expanded: false, hasChildren: false, level: 1, routePath: "run/run/deploy/deploy" },
-                            { name: "Production", id: "production", icon: "icon-light-up", children: [], expanded: false, hasChildren: false, level: 1, routePath: "run/run/production/production" }
+                            { name: "Test", id: "test", icon: "icon-check", class: "color-green", children: [], expanded: false, hasChildren: false, level: 1 },
+                            { name: "Deploy", id: "deploy", icon: "icon-rocket", class: "color-yellow", children: [], expanded: false, hasChildren: false, level: 1, routePath: "run/run/deploy/deploy" },
+                            { name: "Production", id: "production", icon: "icon-light-up", class: "color-orange", children: [], expanded: false, hasChildren: false, level: 1, routePath: "run/run/production/production" }
                         ],
                         expanded: true,
                         hasChildren: true,
@@ -247,8 +272,7 @@ angular.module('umbraco.mocks').
                     break;
             }
 
-
-            return [200, t, null];
+            return $.when(t).then(function (x) { return [200, x, null] });
         }
 
 
@@ -262,44 +286,6 @@ angular.module('umbraco.mocks').
                 $httpBackend
                     .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetChildren'))
                     .respond(returnChildren);
-
-                _.each(["EventHub", "BlobStorage", "TableStorage"], function (input) {
-
-                    _.each(["inputs", "outputs"], function (dir) {
-
-                        $httpBackend
-                            .whenGET(mocksUtils.urlRegex('/debug/' + dir + "/" + input))
-                            .respond(function () {
-
-                                var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu";
-
-                                return $.ajax({
-                                    url: mocksUtils.remoteBaseUrl + dir + "/" + input,
-                                    dataType: 'json',
-                                    type: 'GET'
-                                }).then(function (items) {
-                                    var children = _.map(items, function (item) {
-                                        return {
-                                            id: input + '_' + item.id,
-                                            name: item.name,
-                                            icon: "icon-document",
-                                            children: [],
-                                            expanded: false,
-                                            hasChildren: false,
-                                            level: 3,
-                                            menuUrl: menuUrl
-                                        };
-                                    });
-
-                                    children.sort(function (a, b) {
-                                        return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
-                                    });
-
-                                    return [200, children, null];
-                                });
-                            });
-                    });
-                });
 
                 _.each(["models", "rules"], function (logicType) {
 
@@ -336,6 +322,18 @@ angular.module('umbraco.mocks').
                         });
                 });
 
+                _.each(["inputs", "outputs"], function (dir) {
+
+                    $httpBackend
+                        .whenGET(mocksUtils.urlRegex('/debug/' + dir))
+                        .respond(function () {
+
+                            return getIO(dir).then(function (children) {
+                                return [200, children, null];
+                            });
+                        });
+                });
+
                 $httpBackend
                     .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/DataTypeTree/GetNodes'))
                     .respond(returnDataTypes);
@@ -347,7 +345,7 @@ angular.module('umbraco.mocks').
                 $httpBackend
                     .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetLeafMenu'))
                     .respond(getDeleteMenuItems);
-                    
+
                 $httpBackend
                     .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetContainerMenu'))
                     .respond(getCreateMenuItems);

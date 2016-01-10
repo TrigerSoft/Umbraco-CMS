@@ -63,7 +63,7 @@ angular.module('umbraco.mocks').
 					icon: "icon-file-alt",
 					owner: { name: "Administrator", id: 0 },
 					updater: { name: "Per Ploug Krogslund", id: 1 },
-					path: "-1,-2,EventHub," + id,
+					path: "-1," + id,
 					tabs: [
 						{
 							label: "Event Hub Input Settings",
@@ -147,7 +147,7 @@ angular.module('umbraco.mocks').
 					icon: "icon-file-alt",
 					owner: { name: "Administrator", id: 0 },
 					updater: { name: "Per Ploug Krogslund", id: 1 },
-					path: "-1,-2,TableStorage," + id,
+					path: "-1," + id,
 					tabs: [
 						{
 							label: "Table Storage Input Settings",
@@ -211,7 +211,7 @@ angular.module('umbraco.mocks').
 					icon: "icon-file-alt",
 					owner: { name: "Administrator", id: 0 },
 					updater: { name: "Per Ploug Krogslund", id: 1 },
-					path: "-1,-2,BlobStorage," + id,
+					path: "-1," + id,
 					tabs: [
 						{
 							label: "Blob Storage Input Settings",
