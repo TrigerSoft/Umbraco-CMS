@@ -94,7 +94,7 @@ angular.module('umbraco.mocks').
                     icon: "icon-umb-content",
                     owner: { name: "Administrator", id: 0 },
                     updater: { name: "Per Ploug Krogslund", id: 1 },
-                    path: "-1,-2," + fileType + "," + id,
+                    path: "-1," + fileType + "," + id,
                     // allowedActions: ["U", "H", "A"],
                     tabs: [
                     

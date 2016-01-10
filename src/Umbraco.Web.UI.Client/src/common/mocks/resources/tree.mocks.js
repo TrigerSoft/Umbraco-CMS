@@ -1,339 +1,357 @@
 angular.module('umbraco.mocks').
-  factory('treeMocks', ['$httpBackend', 'mocksUtils', function ($httpBackend, mocksUtils) {
-      'use strict';
-      
-      function getMenuItems() {
+    factory('treeMocks', ['$httpBackend', 'mocksUtils', function ($httpBackend, mocksUtils) {
+        'use strict';
 
-          if (!mocksUtils.checkAuth()) {
-              return [401, null, null];
-          }
+        function getDeleteMenuItems() {
 
-          var menu = [
-              // { name: "Create", cssclass: "plus", alias: "create", metaData: {} },
+            if (!mocksUtils.checkAuth()) {
+                return [401, null, null];
+            }
 
-              { /*seperator: true,*/ name: "Delete", cssclass: "remove", alias: "delete", metaData: {} }//,
-              // { name: "Move", cssclass: "move", alias: "move", metaData: {} },
-              // { name: "Copy", cssclass: "copy", alias: "copy", metaData: {} },
-              // { name: "Sort", cssclass: "sort", alias: "sort", metaData: {} },
+            var menu = [
+                // { name: "Create", cssclass: "plus", alias: "create", metaData: {} },
 
-              // { seperator: true, name: "Publish", cssclass: "globe", alias: "publish", metaData: {} },
-              // { name: "Rollback", cssclass: "undo", alias: "rollback", metaData: {} },
+                { /*seperator: true,*/ name: "Delete", cssclass: "remove", alias: "delete", metaData: {} }//,
+                // { name: "Move", cssclass: "move", alias: "move", metaData: {} },
+                // { name: "Copy", cssclass: "copy", alias: "copy", metaData: {} },
+                // { name: "Sort", cssclass: "sort", alias: "sort", metaData: {} },
 
-              // { seperator: true, name: "Permissions", cssclass: "lock", alias: "permissions", metaData: {} },
-              // { name: "Audit Trail", cssclass: "time", alias: "audittrail", metaData: {} },
-              // { name: "Notifications", cssclass: "envelope", alias: "notifications", metaData: {} },
+                // { seperator: true, name: "Publish", cssclass: "globe", alias: "publish", metaData: {} },
+                // { name: "Rollback", cssclass: "undo", alias: "rollback", metaData: {} },
 
-              // { seperator: true, name: "Hostnames", cssclass: "home", alias: "hostnames", metaData: {} },
-              // { name: "Public Access", cssclass: "group", alias: "publicaccess", metaData: {} },
+                // { seperator: true, name: "Permissions", cssclass: "lock", alias: "permissions", metaData: {} },
+                // { name: "Audit Trail", cssclass: "time", alias: "audittrail", metaData: {} },
+                // { name: "Notifications", cssclass: "envelope", alias: "notifications", metaData: {} },
 
-              // { seperator: true, name: "Reload", cssclass: "refresh", alias: "users", metaData: {} },
+                // { seperator: true, name: "Hostnames", cssclass: "home", alias: "hostnames", metaData: {} },
+                // { name: "Public Access", cssclass: "group", alias: "publicaccess", metaData: {} },
+
+                // { seperator: true, name: "Reload", cssclass: "refresh", alias: "users", metaData: {} },
           
-              //   { seperator: true, name: "Empty Recycle Bin", cssclass: "trash", alias: "emptyrecyclebin", metaData: {} }
-          ];
+                //   { seperator: true, name: "Empty Recycle Bin", cssclass: "trash", alias: "emptyrecyclebin", metaData: {} }
+            ];
 
-          var result = {
-              menuItems: menu,
-              defaultAlias: "create"
-          };
+            var result = {
+                menuItems: menu,
+                defaultAlias: "delete"
+            };
 
-          return [200, result, null];
-      }
+            return [200, result, null];
+        }
+        
+        function getCreateMenuItems() {
 
-      function returnChildren(status, data, headers) {
+            if (!mocksUtils.checkAuth()) {
+                return [401, null, null];
+            }
+
+            var menu = [
+                { name: "Create", cssclass: "plus", alias: "create", metaData: {} }
+            ];
+
+            var result = {
+                menuItems: menu,
+                defaultAlias: "create"
+            };
+
+            return [200, result, null];
+        }
+
+        function returnChildren(status, data, headers) {
+
+            if (!mocksUtils.checkAuth()) {
+                return [401, null, null];
+            }
+
+            var id = mocksUtils.getParameterByName(data, "id");
+            var section = mocksUtils.getParameterByName(data, "treeType");
+            var level = mocksUtils.getParameterByName(data, "level") + 1;
+
+            var url = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetChildren?treeType=" + section + "&id=1234&level=" + level;
+            var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu?treeType=" + section + "&id=1234&parentId=456";
           
-          if (!mocksUtils.checkAuth()) {
-              return [401, null, null];
-          }
+            //hack to have create as default content action
+            var action;
+            if (section === "content") {
+                action = "create";
+            }
 
-          var id = mocksUtils.getParameterByName(data, "id");
-          var section = mocksUtils.getParameterByName(data, "treeType");
-          var level = mocksUtils.getParameterByName(data, "level")+1;
+            var children = [
+                { name: "child-of-" + section, childNodesUrl: url, id: level + "" + 1234, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: level, menuUrl: menuUrl },
+                { name: "random-name-" + section, childNodesUrl: url, id: level + "" + 1235, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: level, menuUrl: menuUrl },
+                { name: "random-name-" + section, childNodesUrl: url, id: level + "" + 1236, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: level, menuUrl: menuUrl },
+                { name: "random-name-" + section, childNodesUrl: url, id: level + "" + 1237, icon: "icon-document", routePath: "common/legacy/1237?p=" + encodeURI("developer/contentType.aspx?idequal1234"), children: [], expanded: false, hasChildren: true, level: level, menuUrl: menuUrl }
+            ];
 
-          var url = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetChildren?treeType=" + section + "&id=1234&level=" + level;
-          var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu?treeType=" + section + "&id=1234&parentId=456";
-          
-          //hack to have create as default content action
-          var action;
-          if (section === "content") {
-              action = "create";
-          }
+            return [200, children, null];
+        }
 
-          var children = [
-              { name: "child-of-" + section, childNodesUrl: url, id: level + "" + 1234, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: level, menuUrl: menuUrl },
-              { name: "random-name-" + section, childNodesUrl: url, id: level + "" + 1235, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: level, menuUrl: menuUrl },
-              { name: "random-name-" + section, childNodesUrl: url, id: level + "" + 1236, icon: "icon-document", children: [], expanded: false, hasChildren: true, level: level, menuUrl: menuUrl },
-              { name: "random-name-" + section, childNodesUrl: url, id: level + "" + 1237, icon: "icon-document", routePath: "common/legacy/1237?p=" + encodeURI("developer/contentType.aspx?idequal1234"), children: [], expanded: false, hasChildren: true, level: level, menuUrl: menuUrl }
-          ];
+        function returnDataTypes(status, data, headers) {
+            if (!mocksUtils.checkAuth()) {
+                return [401, null, null];
+            }
 
-          return [200, children, null];
-      }
+            var children = [
+                { name: "Textstring", childNodesUrl: null, id: 10, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1, menuUrl: null, metaData: { treeAlias: "datatype" } },
+                { name: "Multiple textstring", childNodesUrl: null, id: 11, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1, menuUrl: null, metaData: { treeAlias: "datatype" } },
+                { name: "Yes/No", childNodesUrl: null, id: 12, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1, menuUrl: null, metaData: { treeAlias: "datatype" } },
+                { name: "Rich Text Editor", childNodesUrl: null, id: 13, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1, menuUrl: null, metaData: { treeAlias: "datatype" } }
+            ];
 
-      function returnDataTypes(status, data, headers) {
-          if (!mocksUtils.checkAuth()) {
-              return [401, null, null];
-          }
-          
-          var children = [
-              { name: "Textstring", childNodesUrl: null, id: 10, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null, metaData: { treeAlias: "datatype" } },
-              { name: "Multiple textstring", childNodesUrl: null, id: 11, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null, metaData: { treeAlias: "datatype" } },
-              { name: "Yes/No", childNodesUrl: null, id: 12, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null, metaData: { treeAlias: "datatype" } },
-              { name: "Rich Text Editor", childNodesUrl: null, id: 13, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null, metaData: { treeAlias: "datatype" } }
-          ];  
-          
-          return [200, children, null];
-      }
-      
-      function returnDataTypeMenu(status, data, headers) {
-          if (!mocksUtils.checkAuth()) {
-              return [401, null, null];
-          }
+            return [200, children, null];
+        }
 
-          var menu = [
-              {
-                   name: "Create", cssclass: "plus", alias: "create", metaData: {
-                       jsAction: "umbracoMenuActions.CreateChildEntity"
-                   }
-              },              
-              { seperator: true, name: "Reload", cssclass: "refresh", alias: "users", metaData: {} }
-          ];
+        function returnDataTypeMenu(status, data, headers) {
+            if (!mocksUtils.checkAuth()) {
+                return [401, null, null];
+            }
 
-          return [200, menu, null];
-      }
+            var menu = [
+                {
+                    name: "Create", cssclass: "plus", alias: "create", metaData: {
+                        jsAction: "umbracoMenuActions.CreateChildEntity"
+                    }
+                },
+                { seperator: true, name: "Reload", cssclass: "refresh", alias: "users", metaData: {} }
+            ];
 
-      function returnApplicationTrees(status, data, headers) {
+            return [200, menu, null];
+        }
 
-          if (!mocksUtils.checkAuth()) {
-              return [401, null, null];
-          }
+        function returnApplicationTrees(status, data, headers) {
 
-          var section = mocksUtils.getParameterByName(data, "application");
-          var url = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetChildren?treeType=" + section + "&id=1234&level=1";
-          var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu?treeType=" + section + "&id=1234&parentId=456";
-          var t;
-          switch (section) {
+            if (!mocksUtils.checkAuth()) {
+                return [401, null, null];
+            }
 
-              case "content":
-                  t = {
-                      name: "content",
-                      id: -1,
-                      children: [
-                          { 
-                            name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
-                              { name: "Fact Types", childNodesUrl: "/debug/logic/models", id: "models", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl },
-                              { name: "Rules", childNodesUrl: "/debug/logic/rules", id: "rules", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "content" }, menuUrl: menuUrl }
-                          ], expanded: true, hasChildren: true, level: 1 }
-                      ],
-                      expanded: true,
-                      hasChildren: true,
-                      level: 0,
-//                      menuUrl: menuUrl,
-                      metaData: { treeAlias: "content" }
-                  };
+            var section = mocksUtils.getParameterByName(data, "application");
+            var url = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetChildren?treeType=" + section + "&id=1234&level=1";
+            var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetContainerMenu?treeType=" + section + "&id=1234&parentId=456";
+            var t;
+            switch (section) {
 
-                  break;
-              case "inputs":
-                  t = {
-                      name: "inputs",
-                      id: -1,
-                      children: [
-                          {
-                              name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
-                                  { name: "Event Hubs", childNodesUrl: "/debug/inputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                  { name: "Table Storage", childNodesUrl: "/debug/inputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                  { name: "Blob Storage", childNodesUrl: "/debug/inputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
-                              ], expanded: true, hasChildren: true, level: 1
-                          }
-                      ],
-                      expanded: true,
-                      hasChildren: true,
-                      level: 0,
-                      //menuUrl: menuUrl,
-                      metaData: { treeAlias: "media" }
-                  };
-                  
-                  break;
-              case "outputs":
-                  t = {
-                      name: "outputs",
-                      id: -1,
-                      children: [
-                          {
-                              name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
-                                  { name: "Event Hubs", childNodesUrl: "/debug/outputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                  { name: "Table Storage", childNodesUrl: "/debug/outputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
-                                  { name: "Blob Storage", childNodesUrl: "/debug/outputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
-                              ], expanded: true, hasChildren: true, level: 1
-                          }
-                      ],
-                      expanded: true,
-                      hasChildren: true,
-                      level: 0,
-                      //menuUrl: menuUrl,
-                      metaData: { treeAlias: "media" }
-                  };
+                case "content":
+                    t = {
+                        name: "logics",
+                        id: -1,
+                        children: [
+                            { name: "Fact Types", childNodesUrl: "/debug/logic/models", id: "models", parentId: -1, icon: "icon-folder-close1", isContainer: true, children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
+                            { name: "Rules", childNodesUrl: "/debug/logic/rules", id: "rules", parentId: -1, icon: "icon-folder-close1", isContainer: true, children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl }
+                        ],
+                        expanded: true,
+                        hasChildren: true,
+                        level: 0,
+                        menuUrl: menuUrl,
+                        metaData: { treeAlias: "content" }
+                    };
 
-                  break;
-               case "run":
-                  t = {
-                      name: "run",
-                      id: -1,
-                      children: [
-                          { name: "Test", id: "test", icon: "icon-home", children: [], expanded: false, hasChildren: false, level: 1},
-                          { name: "Deploy", id: "deploy", icon: "icon-home", children: [], expanded: false, hasChildren: false, level: 1, routePath: "run/run/deploy/deploy"},
-                          { name: "Production", id: "production", icon: "icon-globe-alt", children: [], expanded: false, hasChildren: false, level: 1}
-                      ],
-                      expanded: true,
-                      hasChildren: true,
-                      level: 0,
-                      isContainer: true,
-                      metaData: {treeAlias: "run"}
-                  };
-                  
-                  break;
-              case "developer":                  
+                    break;
+                case "inputs":
+                    t = {
+                        name: "inputs",
+                        id: -1,
+                        children: [
+                            {
+                                name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
+                                    { name: "Event Hubs", childNodesUrl: "/debug/inputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                    { name: "Table Storage", childNodesUrl: "/debug/inputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                    { name: "Blob Storage", childNodesUrl: "/debug/inputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
+                                ], expanded: true, hasChildren: true, level: 1
+                            }
+                        ],
+                        expanded: true,
+                        hasChildren: true,
+                        level: 0,
+                        //menuUrl: menuUrl,
+                        metaData: { treeAlias: "media" }
+                    };
 
-                  var dataTypeChildrenUrl = "/umbraco/UmbracoTrees/DataTypeTree/GetNodes?id=-1&application=developer";
-                  var dataTypeMenuUrl = "/umbraco/UmbracoTrees/DataTypeTree/GetMenu?id=-1&application=developer";
+                    break;
+                case "outputs":
+                    t = {
+                        name: "outputs",
+                        id: -1,
+                        children: [
+                            {
+                                name: "Development", id: -2, parentId: -1, icon: "icon-home", children: [
+                                    { name: "Event Hubs", childNodesUrl: "/debug/outputs/EventHub", id: "EventHub", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                    { name: "Table Storage", childNodesUrl: "/debug/outputs/TableStorage", id: "TableStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl },
+                                    { name: "Blob Storage", childNodesUrl: "/debug/outputs/BlobStorage", id: "BlobStorage", parentId: -2, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 2, metaData: { treeAlias: "media" }, menuUrl: menuUrl }
+                                ], expanded: true, hasChildren: true, level: 1
+                            }
+                        ],
+                        expanded: true,
+                        hasChildren: true,
+                        level: 0,
+                        //menuUrl: menuUrl,
+                        metaData: { treeAlias: "media" }
+                    };
 
-                  t = {
-                      name: "developer",
-                      id: -1,
-                      children: [
-                          { name: "Data types", childNodesUrl: dataTypeChildrenUrl, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: dataTypeMenuUrl, metaData: { treeAlias: "datatype" } },
-                          { name: "Macros", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "macros" } },
-                          { name: "Packages", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "packager" } },
-                          { name: "XSLT Files", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "xslt" } },
-                          { name: "Partial View Macros", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "partialViewMacros" } }
-                      ],
-                      expanded: true,
-                      hasChildren: true,
-                      level: 0,
-                      isContainer: true
-                  };
+                    break;
+                case "run":
+                    t = {
+                        name: "run",
+                        id: -1,
+                        children: [
+                            { name: "Test", id: "test", icon: "icon-check", children: [], expanded: false, hasChildren: false, level: 1 },
+                            { name: "Deploy", id: "deploy", icon: "icon-rocket", children: [], expanded: false, hasChildren: false, level: 1, routePath: "run/run/deploy/deploy" },
+                            { name: "Production", id: "production", icon: "icon-light-up", children: [], expanded: false, hasChildren: false, level: 1, routePath: "run/run/production/production" }
+                        ],
+                        expanded: true,
+                        hasChildren: true,
+                        level: 0,
+                        metaData: { treeAlias: "run" }
+                    };
 
-                  break;
-              default:
-                  
-                  t = {
-                      name: "randomTree",
-                      id: -1,
-                      children: [
-                          { name: "random-name-" + section, childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
-                          { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
-                          { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
-                          { name: "random-name-" + section, childNodesUrl: url, id: 1237, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl }
-                      ],
-                      expanded: true,
-                      hasChildren: true,
-                      level: 0,
-                      menuUrl: menuUrl,
-                      metaData: { treeAlias: "randomTree" }
-                  };
+                    break;
+                case "developer":
 
-                  break;
-          }
+                    var dataTypeChildrenUrl = "/umbraco/UmbracoTrees/DataTypeTree/GetNodes?id=-1&application=developer";
+                    var dataTypeMenuUrl = "/umbraco/UmbracoTrees/DataTypeTree/GetMenu?id=-1&application=developer";
 
-      
-          return [200, t, null];
+                    t = {
+                        name: "developer",
+                        id: -1,
+                        children: [
+                            { name: "Data types", childNodesUrl: dataTypeChildrenUrl, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: dataTypeMenuUrl, metaData: { treeAlias: "datatype" } },
+                            { name: "Macros", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "macros" } },
+                            { name: "Packages", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "packager" } },
+                            { name: "XSLT Files", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "xslt" } },
+                            { name: "Partial View Macros", childNodesUrl: url, id: -1, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl, metaData: { treeAlias: "partialViewMacros" } }
+                        ],
+                        expanded: true,
+                        hasChildren: true,
+                        level: 0,
+                        isContainer: true
+                    };
+
+                    break;
+                default:
+
+                    t = {
+                        name: "randomTree",
+                        id: -1,
+                        children: [
+                            { name: "random-name-" + section, childNodesUrl: url, id: 1234, icon: "icon-home", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
+                            { name: "random-name-" + section, childNodesUrl: url, id: 1235, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
+                            { name: "random-name-" + section, childNodesUrl: url, id: 1236, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl },
+                            { name: "random-name-" + section, childNodesUrl: url, id: 1237, icon: "icon-folder-close", children: [], expanded: false, hasChildren: true, level: 1, menuUrl: menuUrl }
+                        ],
+                        expanded: true,
+                        hasChildren: true,
+                        level: 0,
+                        menuUrl: menuUrl,
+                        metaData: { treeAlias: "randomTree" }
+                    };
+
+                    break;
+            }
+
+
+            return [200, t, null];
         }
 
 
-      return {
-          register: function() {
-              
-              $httpBackend
-                 .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetApplicationTrees'))
-                 .respond(returnApplicationTrees);
+        return {
+            register: function () {
 
-              $httpBackend
-                 .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetChildren'))
-                 .respond(returnChildren);
-              
-              _.each(["EventHub", "BlobStorage", "TableStorage"], function (input) {
+                $httpBackend
+                    .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetApplicationTrees'))
+                    .respond(returnApplicationTrees);
 
-                _.each(["inputs", "outputs"], function (dir) {
+                $httpBackend
+                    .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetChildren'))
+                    .respond(returnChildren);
 
-                  $httpBackend
-                    .whenGET(mocksUtils.urlRegex('/debug/' + dir + "/" + input))
-                    .respond(function () {
+                _.each(["EventHub", "BlobStorage", "TableStorage"], function (input) {
 
-                        var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu";
+                    _.each(["inputs", "outputs"], function (dir) {
 
-                        return $.ajax({
-                            url: mocksUtils.remoteBaseUrl + dir + "/" + input,
-                            dataType: 'json',
-                            type: 'GET'
-                        }).then(function (items) {
-                            var children = _.map(items, function (item) {
-                                return {
-                                    id: input + '_' + item.id,
-                                    name: item.name,
-                                    icon: "icon-document",
-                                    children: [],
-                                    expanded: false,
-                                    hasChildren: false,
-                                    level: 3,
-                                    menuUrl: menuUrl
-                                };
+                        $httpBackend
+                            .whenGET(mocksUtils.urlRegex('/debug/' + dir + "/" + input))
+                            .respond(function () {
+
+                                var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu";
+
+                                return $.ajax({
+                                    url: mocksUtils.remoteBaseUrl + dir + "/" + input,
+                                    dataType: 'json',
+                                    type: 'GET'
+                                }).then(function (items) {
+                                    var children = _.map(items, function (item) {
+                                        return {
+                                            id: input + '_' + item.id,
+                                            name: item.name,
+                                            icon: "icon-document",
+                                            children: [],
+                                            expanded: false,
+                                            hasChildren: false,
+                                            level: 3,
+                                            menuUrl: menuUrl
+                                        };
+                                    });
+
+                                    children.sort(function (a, b) {
+                                        return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
+                                    });
+
+                                    return [200, children, null];
+                                });
                             });
-                            
-                            children.sort(function(a, b) {
-                              return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
-                            });
-
-                            return [200, children, null];
-                        });
                     });
-                 });
-              });
-              
-               _.each(["models", "rules"], function (logicType) {
+                });
 
-                  $httpBackend
-                    .whenGET(mocksUtils.urlRegex('/debug/logic/' + logicType))
-                    .respond(function () {
-                      
-                      var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu";
+                _.each(["models", "rules"], function (logicType) {
 
-                        return $.ajax({
-                            url: mocksUtils.remoteBaseUrl + "logic/" + logicType,
-                            dataType: 'json',
-                            type: 'GET'
-                        }).then(function (items) {
-                            var children = _.map(items, function (item) {
-                                return {
-                                    id: logicType + '_' + item.id,
-                                    name: item.name,
-                                    icon: "icon-document",
-                                    children: [],
-                                    expanded: false,
-                                    hasChildren: false,
-                                    level: 3,
-                                    menuUrl: menuUrl
-                                };
+                    $httpBackend
+                        .whenGET(mocksUtils.urlRegex('/debug/logic/' + logicType))
+                        .respond(function () {
+
+                            var menuUrl = "/umbraco/UmbracoTrees/ApplicationTreeApi/GetLeafMenu";
+
+                            return $.ajax({
+                                url: mocksUtils.remoteBaseUrl + "logic/" + logicType,
+                                dataType: 'json',
+                                type: 'GET'
+                            }).then(function (items) {
+                                var children = _.map(items, function (item) {
+                                    return {
+                                        id: logicType + '_' + item.id,
+                                        name: item.name,
+                                        icon: "icon-document",
+                                        children: [],
+                                        expanded: false,
+                                        hasChildren: false,
+                                        level: 2,
+                                        menuUrl: menuUrl
+                                    };
+                                });
+
+                                children.sort(function (a, b) {
+                                    return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
+                                });
+
+                                return [200, children, null];
                             });
-                            
-                            children.sort(function(a, b) {
-                              return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
-                            });
-
-                            return [200, children, null];
                         });
-                    });
-                 });
+                });
 
-              $httpBackend
-                 .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/DataTypeTree/GetNodes'))
-                 .respond(returnDataTypes);
-              
-              $httpBackend
-                 .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/DataTypeTree/GetMenu'))
-                 .respond(returnDataTypeMenu);
-              
-              $httpBackend
-                 .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetMenu'))
-                 .respond(getMenuItems);
-              
-          }
-      };
-  }]);
+                $httpBackend
+                    .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/DataTypeTree/GetNodes'))
+                    .respond(returnDataTypes);
+
+                $httpBackend
+                    .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/DataTypeTree/GetMenu'))
+                    .respond(returnDataTypeMenu);
+
+                $httpBackend
+                    .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetLeafMenu'))
+                    .respond(getDeleteMenuItems);
+                    
+                $httpBackend
+                    .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoTrees/ApplicationTreeApi/GetContainerMenu'))
+                    .respond(getCreateMenuItems);
+
+            }
+        };
+    }]);

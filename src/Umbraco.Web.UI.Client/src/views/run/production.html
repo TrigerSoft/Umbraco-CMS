@@ -1,5 +1,5 @@
 ﻿<form novalidate name="contentForm"
-      ng-controller="Umbraco.Editors.Run.DeployController""
+      ng-controller="Umbraco.Editors.Run.ProductionController""
       ng-submit="deploy()"
       ng-show="loaded"
       val-form-manager>
@@ -47,7 +47,12 @@
                         </div>
                         <div class="btn-group" style="margin-left:50px">
                             <button type="submit" class="btn btn-success">
-                                <localize key="buttons_deploy">Start</localize>
+                                <localize key="buttons_restart">Start</localize>
+                            </button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-default">
+                                <localize key="buttons_stop">Stop</localize>
                             </button>
                         </div>
                     </div>

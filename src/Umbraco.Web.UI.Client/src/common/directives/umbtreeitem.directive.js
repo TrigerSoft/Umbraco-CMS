@@ -149,7 +149,10 @@ angular.module("umbraco.directives")
               defined on the tree
             */
             scope.select = function(n, ev) {
-                emitEvent("treeNodeSelect", { element: element, tree: scope.tree, node: n, event: ev });
+                if (n.isContainer)
+                    this.load(n);
+                else
+                    emitEvent("treeNodeSelect", { element: element, tree: scope.tree, node: n, event: ev });
             };
 
             /**
