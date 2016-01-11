@@ -5,7 +5,6 @@
             ng-switch-default
             ng-model="model.value"
             ng-options="item.id as item.value for item in model.config.items">
-        <option></option>
     </select>
     
     <!--NOTE: This ng-switch is required because ng-multiple doesn't actually support dynamic bindings with multi-select lists -->

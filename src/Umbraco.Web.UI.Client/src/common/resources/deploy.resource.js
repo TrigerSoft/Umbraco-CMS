@@ -1,4 +1,7 @@
 function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
+    var unitsItems = _.map(_.range(1, 24), function (value) {
+        return { id: value, sortOrder: value, value: String(value) };
+    });
     return {
         saveDeployContent: function (content) {
             var props = _.filter(content.tabs[0].properties, function (prop) {
@@ -8,8 +11,6 @@ function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
             _.each(props, function (prop) {
                 var value = prop.value;
                 var alias = prop.alias;
-                if (alias === "ProcessingUnits")
-                    value = +value;
                 data[alias] = value;
             });
             return umbRequestHelper.resourcePromise(
@@ -20,11 +21,6 @@ function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
                 'Failed to save run params');
         },
         getDeployContent: function () {
-            var unitsRange = _.range(1, 24);
-            var unitsItems = {};
-            _.each(unitsRange, function (value) {
-                unitsItems[value] = String(value);
-            });
             var content = {
                 name: "Deployment",
                 tabs: [
@@ -40,7 +36,7 @@ function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
                             },
                             {
                                 label: 'Processing Units',
-                                value: null,//properties.connectionString,
+                                value: 1,
                                 view: "dropdown",
                                 alias: "ProcessingUnits",
                                 config: {
@@ -57,7 +53,7 @@ function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
                             },
                             {
                                 label: 'Application Insights Instrumentation Key',
-                                value: null,//properties.connectionString,
+                                value: null,
                                 view: "textbox",
                                 alias: "AIKey",
                                 validation: {
@@ -78,7 +74,7 @@ function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
                 'Failed to get run params').then(function (props) {
                     _.each(content.tabs[0].properties, function (prop) {
                         if ('alias' in prop)
-                            prop.value = String(props[prop.alias]);
+                            prop.value = props[prop.alias] || prop.value;
                     });
 
                     return content;
