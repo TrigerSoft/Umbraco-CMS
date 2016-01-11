@@ -3,7 +3,7 @@
  * @name Umbraco.Editors.Content.EditController
  * @function
  */
-function RunDeployController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState) {
+function RunDeployController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState, navigationService) {
 
     function init(content) {
         editorState.set($scope.content);
@@ -23,6 +23,9 @@ function RunDeployController($scope, $element, $routeParams, deployResource, not
             // if there are any and then clear them so the collection no longer persists them.
             serverValidationManager.executeAndClearAllSubscriptions();
 
+            navigationService.syncTree({ tree: "run", path: ["-1", "deploy"], forceReload: false }).then(function (syncArgs) {
+                $scope.currentNode = syncArgs.node;
+            });
         });
 
     $scope.deploy = function () {

@@ -3,7 +3,7 @@
  * @name Umbraco.Editors.Content.EditController
  * @function
  */
-function TestEditController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState) {
+function TestEditController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState, navigationService) {
 
     function init(content) {
         editorState.set($scope.content);
@@ -23,6 +23,9 @@ function TestEditController($scope, $element, $routeParams, deployResource, noti
             // if there are any and then clear them so the collection no longer persists them.
             serverValidationManager.executeAndClearAllSubscriptions();
 
+            navigationService.syncTree({ tree: "run", path: ["-1", "test"], forceReload: false }).then(function (syncArgs) {
+                $scope.currentNode = syncArgs.node;
+            });
         });
     
     $scope.$on("end-logging", function (e) {
