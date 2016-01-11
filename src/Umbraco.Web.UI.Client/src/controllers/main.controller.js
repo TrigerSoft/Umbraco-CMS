@@ -84,21 +84,21 @@ function MainController($scope, $rootScope, $location, $routeParams, $timeout, $
             tmhDynamicLocale.set($scope.user.locale);
         }
 
-        if($scope.user.emailHash){
-            $timeout(function () {                
-                //yes this is wrong.. 
-                $("#avatar-img").fadeTo(1000, 0, function () {
-                    $timeout(function () {
-                        //this can be null if they time out
-                        if ($scope.user && $scope.user.emailHash) {
-                            $scope.avatar = "https://www.gravatar.com/avatar/" + $scope.user.emailHash + ".jpg?s=64&d=mm";
-                        }
-                    });
-                    $("#avatar-img").fadeTo(1000, 1);
-                });
+        // if($scope.user.emailHash){
+        //     $timeout(function () {                
+        //         //yes this is wrong.. 
+        //         $("#avatar-img").fadeTo(1000, 0, function () {
+        //             $timeout(function () {
+        //                 //this can be null if they time out
+        //                 if ($scope.user && $scope.user.emailHash) {
+        //                     $scope.avatar = "https://www.gravatar.com/avatar/" + $scope.user.emailHash + ".jpg?s=64&d=mm";
+        //                 }
+        //             });
+        //             $("#avatar-img").fadeTo(1000, 1);
+        //         });
                 
-              }, 3000);  
-        }
+        //       }, 3000);  
+        // }
 
     }));
 

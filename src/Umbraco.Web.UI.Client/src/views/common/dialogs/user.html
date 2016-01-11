@@ -1,25 +1,25 @@
-<div class="umb-panel umb-user-panel" ng-controller="Umbraco.Dialogs.UserController">
+<div class="umb-panel umb-user-panel"><!--ng-controller="Umbraco.Dialogs.UserController"-->
     <div class="umb-panel-header">
-        <div class="umb-el-wrap umb-panel-buttons">
+        <!--<div class="umb-el-wrap umb-panel-buttons">
             <div class="btn-toolbar umb-btn-toolbar">
                 <button ng-click="logout()" hotkey="ctrl+shift+l" class="btn btn-warning">
                     <localize key="general_logout">Log out</localize>
                 </button>
             </div>
-        </div>
-        <h1 class="headline">{{user.name}}</h1>
-        <p class="muted">
-            <small>
-                <localize key="user_sessionExpires" />: {{remainingAuthSeconds | timespan}}
-            </small>
-        </p>
+        </div>-->
+        <h1 class="headline">Drools Event Stream Analytics</h1>
+        <p class="muted"><a href="http://www.streamx.co" target="_blank">by StreamX<a/></p>
 
     </div>
 
     <div class="umb-panel-body umb-scrollable">
         <div class="tab-content umb-control-group">
-
-            <div class="umb-pane" ng-if="canEditProfile">
+            <div class="umb-pane">
+                <p>Drools Business Rules Engine Version: 6.3.0</p>
+                <p><a href="http://www.drools.org/code/license.html" target="_blank">License Information</a></p>
+                <small class="umb-version">&copy; Copyright 2016, Streamx, LLC</small>
+            </div>
+            <!--<div class="umb-pane" ng-if="canEditProfile">
                 <h5><localize key="user_yourProfile" /></h5>
                 <p>
                     <a href="#/users/framed/%252Fumbraco%252Fusers%252Fedituser.aspx%253Fid%253D{{user.id}}"
@@ -74,8 +74,6 @@
                 </ul>
             </div>
 
-        </div>
-
-        <small class="umb-version">Umbraco version {{version}}</small>
+        </div>-->
     </div>
 </div>

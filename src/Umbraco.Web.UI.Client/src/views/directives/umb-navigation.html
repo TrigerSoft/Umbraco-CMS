@@ -10,14 +10,14 @@
         <div ng-swipe-left="nav.hideNavigation()" class="navigation-inner-container span6">
             
             <!-- the search -->
-            <div ng-controller="Umbraco.SearchController" ng-if="authenticated">
+            <div ng-controller="Umbraco.StatusController" ng-if="authenticated">
                           
                 <!-- Search form -->      
                 <div id="search-form">
                     <div class="umb-modalcolumn-header">
 
                         <form class="form-search" novalidate>
-                            <i class="icon-search"></i>
+                            <!--<i class="icon-search"></i>
                             <input type="text"
                                 hotkey="ctrl+space"
                                 id="search-field"
@@ -25,13 +25,15 @@
                                 class="umb-search-field search-query"
                                 localize="placeholder"
                                 placeholder="@placeholders_search"
-                                ng-keydown="navigateResults($event)"/>                            
+                                ng-keydown="navigateResults($event)"/>                            -->
+                             <h1 class="headline">Job Status: {{status}}</h3>
+                             
                         </form>
                     </div>
                 </div>
 
                 <!-- Search results -->
-                <div id="search-results" class="umb-modalcolumn-body" ng-show="showSearchResults">
+                <!--<div id="search-results" class="umb-modalcolumn-body" ng-show="showSearchResults">
 
                     <ul class="umb-tree">
                         <li class="root">
@@ -58,7 +60,7 @@
 
                         </li>
                     </ul>    
-                </div>
+                </div>-->
             
             </div>
 
