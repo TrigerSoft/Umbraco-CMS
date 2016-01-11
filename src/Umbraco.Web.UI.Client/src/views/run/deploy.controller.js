@@ -3,7 +3,7 @@
  * @name Umbraco.Editors.Content.EditController
  * @function
  */
-function RunDeployController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState, navigationService) {
+function RunDeployController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState, navigationService, formHelper) {
 
     function init(content) {
         editorState.set($scope.content);
@@ -28,6 +28,19 @@ function RunDeployController($scope, $element, $routeParams, deployResource, not
             });
         });
 
+    $scope.save = function () {
+        if ($scope.busy)
+            return;
+
+        $scope.busy = true;
+
+        deployResource.saveDeployContent($scope.content).then(function () {
+            formHelper.resetForm({ scope: $scope });
+        }).always(function () {
+            $scope.busy = false;
+        });
+    };
+
     $scope.deploy = function () {
 
         if ($scope.busy)
@@ -36,7 +49,7 @@ function RunDeployController($scope, $element, $routeParams, deployResource, not
         $scope.busy = true;
 
         deployResource.deploy().then(function (runId) {
- 
+
         }).always(function () {
             $scope.busy = false;
         });

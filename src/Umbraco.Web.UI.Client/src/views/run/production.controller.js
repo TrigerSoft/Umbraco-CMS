@@ -3,7 +3,7 @@
  * @name Umbraco.Editors.Content.EditController
  * @function
  */
-function RunProductionController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState, navigationService) {
+function RunProductionController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState, navigationService, formHelper) {
 
     function init(content) {
         editorState.set($scope.content);
@@ -27,6 +27,19 @@ function RunProductionController($scope, $element, $routeParams, deployResource,
                 $scope.currentNode = syncArgs.node;
             });
         });
+
+    $scope.save = function () {
+        if ($scope.busy)
+            return;
+
+        $scope.busy = true;
+
+        deployResource.saveDeployContent($scope.content).then(function () {
+            formHelper.resetForm({ scope: $scope });
+        }).always(function () {
+            $scope.busy = false;
+        });
+    };
 
     $scope.deploy = function () {
 

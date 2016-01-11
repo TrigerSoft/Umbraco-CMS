@@ -170,10 +170,14 @@ angular.module('umbraco.mocks').
                 return $.when([401, null, null]);
             }
 
-            return $.ajax({
-                url: mocksUtils.remoteBaseUrl + "run/params",
-                type: 'POST'
-            }).then(function () {
+            var ajax = {
+                url: mocksUtils.remoteBaseUrl + "job/props",
+                contentType: 'application/json',
+                type: 'PUT',
+                data: data
+            };
+
+            return $.ajax(ajax).then(function () {
                 return [200, null, null];
             });
         }
@@ -184,7 +188,7 @@ angular.module('umbraco.mocks').
             }
 
             return $.ajax({
-                url: mocksUtils.remoteBaseUrl + "run/params",
+                url: mocksUtils.remoteBaseUrl + "job/props",
                 type: 'GET'
             }).then(function (data) {
                 return [200, data, null];

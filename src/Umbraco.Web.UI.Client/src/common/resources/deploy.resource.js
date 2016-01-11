@@ -1,5 +1,24 @@
-function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
+function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
     return {
+        saveDeployContent: function (content) {
+            var props = _.filter(content.tabs[0].properties, function (prop) {
+                return prop.view !== 'readonlyvalue';
+            });
+            var data = {};
+            _.each(props, function (prop) {
+                var value = prop.value;
+                var alias = prop.alias;
+                if (alias === "ProcessingUnits")
+                    value = +value;
+                data[alias] = value;
+            });
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "mediaApiBaseUrl",
+                        "Run/Params"), data),
+                'Failed to save run params');
+        },
         getDeployContent: function () {
             var unitsRange = _.range(1, 24);
             var unitsItems = {};
@@ -16,14 +35,14 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
                         properties: [
                             {
                                 hideLabel: true,
-                                value: "<span class='description'>Drools Stream Analytics job can be scaled through Processing Units, which define the amount of processing power a job receives. Each Processing Unit corresponds to roughly 1 core.<br/>The job might be scaled up to the number of partitions in the input Event/IoT Hubs.</span>",
+                                value: "<span class='description'>Drools Stream Analytics job can be scaled through Processing Units, which define the amount of processing power a job receives. Each Processing Unit corresponds to roughly 1 compute core.<br/>The job might be scaled up to the number of partitions in the input Event/IoT Hubs.</span>",
                                 view: "readonlyvalue"
                             },
                             {
                                 label: 'Processing Units',
                                 value: null,//properties.connectionString,
                                 view: "dropdown",
-                                alias: "processingUnits",
+                                alias: "ProcessingUnits",
                                 config: {
                                     items: unitsItems
                                 },
@@ -40,7 +59,7 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
                                 label: 'Application Insights Instrumentation Key',
                                 value: null,//properties.connectionString,
                                 view: "textbox",
-                                alias: "aiKey",
+                                alias: "AIKey",
                                 validation: {
                                     mandatory: true
                                 }
@@ -50,7 +69,20 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
                 ]
             };
 
-            return $q.when(content);
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "mediaApiBaseUrl",
+                        "Run/Params",
+                        [])),
+                'Failed to get run params').then(function (props) {
+                    _.each(content.tabs[0].properties, function (prop) {
+                        if ('alias' in prop)
+                            prop.value = String(props[prop.alias]);
+                    });
+
+                    return content;
+                });
         },
         deploy: function (properties) {
             return umbRequestHelper.resourcePromise(
@@ -160,4 +192,4 @@ function deployResource($q, $http, umbDataFormatter, umbRequestHelper) {
     };
 }
 
-angular.module('umbraco.resources').factory('deployResource', deployResource);
+angular.module('umbraco.resources').factory('deployResource', runResource);

@@ -27,7 +27,7 @@ function TestEditController($scope, $element, $routeParams, deployResource, noti
                 $scope.currentNode = syncArgs.node;
             });
         });
-    
+
     $scope.$on("end-logging", function (e) {
         e.stopPropagation();
         startStop(false);
