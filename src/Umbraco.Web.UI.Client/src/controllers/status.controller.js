@@ -13,10 +13,14 @@ function StatusController($scope, mocksUtils) {
         url: mocksUtils.remoteBaseUrl + "job/status",
         type: 'GET'
     }).then(function (data) {
-        $scope.status = data;
+        $scope.$root.status = data;
     });
 
-    $scope.status = "...";
+    $scope.$root.status = "...";
+    
+    $scope.$root.$on("JOB-STATUS", function(e, status) {
+        $scope.$root.status = status;
+    });
 
 }
 //register it

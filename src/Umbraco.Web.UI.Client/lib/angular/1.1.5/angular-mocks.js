@@ -963,7 +963,7 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
         if (response instanceof Array)
             invokeCallback(response);
         else
-            response.then(invokeCallback);
+            response.then(invokeCallback, invokeCallback);
       }
 
       function handleTimeout() {

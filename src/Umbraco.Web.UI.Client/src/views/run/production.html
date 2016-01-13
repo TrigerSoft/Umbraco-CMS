@@ -7,7 +7,7 @@
         <umb-header tabs="content.tabs">
 
             <div class="umb-headline-editor-wrapper span12">
-                <h1>{{content.name}}</h1>
+                <h1>Production</h1>
             </div>
             <!--<div class="span7">
                 <umb-content-name placeholder="@placeholders_entername"
@@ -29,7 +29,9 @@
 
         </umb-header>
 
-        <umb-tab-view>
+        <umb-tab-view ng-switch="$root.status">
+            <h3 style="margin-left:30px" ng-switch-when="New">Job is not <a href="#/run/run/deploy/deploy">deployed</a></h3>
+            <div ng-switch-default>
             <umb-tab id="tab{{tab.id}}" rel="{{tab.id}}" ng-repeat="tab in content.tabs">
                 <div class="umb-pane">
                     <umb-property property="property"
@@ -58,8 +60,7 @@
                     </div>
 
                 </div>
-            </umb-tab>
-
+            </umb-tab></div>
         </umb-tab-view>
     </umb-panel>
 </form>

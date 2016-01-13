@@ -138,6 +138,21 @@ angular.module('umbraco.mocks').
                 return [200, testId, null];
             });
         }
+        
+        function deploy(method, url, data, headers) {
+            if (!mocksUtils.checkAuth()) {
+                return $.when([401, null, null]);
+            }
+
+            return $.ajax({
+                url: mocksUtils.remoteBaseUrl + "run/deploy",
+                type: 'POST'
+            }).then(function () {
+                return [200, null, null];
+            }, function(failure) {
+                return [failure.status, failure.responseText, null];
+            });
+        }
 
         function go(method, url, data, headers) {
             if (!mocksUtils.checkAuth()) {
@@ -283,7 +298,11 @@ angular.module('umbraco.mocks').
                     .respond(returnRuntimeParameters);
 
                 $httpBackend
-                    .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/Run'))
+                    .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/Run/Deploy'))
+                    .respond(deploy);
+
+                $httpBackend
+                    .whenPOST(mocksUtils.urlRegex('/umbraco/UmbracoApi/Media/Run/Start'))
                     .respond(go);
 
                 $httpBackend

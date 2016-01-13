@@ -3,7 +3,7 @@
  * @name Umbraco.Editors.Content.EditController
  * @function
  */
-function RunDeployController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState, navigationService, formHelper) {
+function RunDeployController($scope, $element, $routeParams, deployResource, notificationsService, serverValidationManager, contentEditingHelper, editorState, navigationService, formHelper, $location) {
 
     function init(content) {
         editorState.set($scope.content);
@@ -34,7 +34,7 @@ function RunDeployController($scope, $element, $routeParams, deployResource, not
 
         $scope.busy = true;
 
-        deployResource.saveDeployContent($scope.content).then(function () {
+        return deployResource.saveDeployContent($scope.content).then(function () {
             formHelper.resetForm({ scope: $scope });
         }).always(function () {
             $scope.busy = false;
@@ -43,15 +43,24 @@ function RunDeployController($scope, $element, $routeParams, deployResource, not
 
     $scope.deploy = function () {
 
-        if ($scope.busy)
-            return;
+        this.save().then(function () {
 
-        $scope.busy = true;
+            $scope.busy = true;
 
-        deployResource.deploy().then(function (runId) {
-
-        }).always(function () {
-            $scope.busy = false;
+            deployResource.deploy().success(function () {
+                $scope.$root.$emit("JOB-STATUS", "Stopped");
+                return deployResource.start().then(function () {
+                    $scope.$root.$emit("JOB-STATUS", "Started");
+                    $location.path("run/run/production/production");
+                });
+            }).error(function (failure) {
+                if (!notificationsService.hasView()) {
+                    var msg = { view: "deployerror", args: { message: failure } };
+                    notificationsService.add(msg);
+                }
+            }).always(function () {
+                $scope.busy = false;
+            });
         });
     };
 }

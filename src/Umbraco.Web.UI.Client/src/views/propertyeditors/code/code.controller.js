@@ -11,6 +11,7 @@ function CodeEditorController($scope, $element, assetsService, dialogService, $t
         .then(function () {
 
             var editor = ace.edit($element[0]);
+            editor.$blockScrolling = Infinity;
             if ($scope.model.value) {
                 editor.getSession().setValue($scope.model.value);
 

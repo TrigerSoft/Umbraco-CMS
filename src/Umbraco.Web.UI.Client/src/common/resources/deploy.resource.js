@@ -81,13 +81,18 @@ function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
                 });
         },
         deploy: function (properties) {
-            return umbRequestHelper.resourcePromise(
-                $http.post(
+            return $http.post(
                     umbRequestHelper.getApiUrl(
                         "mediaApiBaseUrl",
-                        "Run",
-                        [])),
-                'Failed to run test');
+                        "Run/Deploy",
+                        []));
+        },
+        start: function (properties) {
+            return $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "mediaApiBaseUrl",
+                        "Run/Start",
+                        []));
         },
         getDevContent: function () {
             var content = {
@@ -175,15 +180,13 @@ function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
         },
         test: function (seconds) {
 
-            return umbRequestHelper.resourcePromise(
-                $http.post(
+            return $http.post(
                     umbRequestHelper.getApiUrl(
                         "mediaApiBaseUrl",
                         "Test",
                         [
                             { seconds: seconds }
-                        ])),
-                'Failed to run test');
+                        ]));
         }
     };
 }

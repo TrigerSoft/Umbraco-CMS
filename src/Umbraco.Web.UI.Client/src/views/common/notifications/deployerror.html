@@ -1,0 +1,7 @@
+<div ng-controller="Umbraco.Notifications.DeployErrorController">
+	<h3>{{notification.args.message}}</h3>
+	<h4><a ng-click="link('run/run/edit/test', notification)" href="#" prevent-default>Test</a> job before deployment</h4>
+    <br/>
+    <br/>
+	<button class="btn btn-link" ng-click="close(notification)">Cancel</button>
+</div>
