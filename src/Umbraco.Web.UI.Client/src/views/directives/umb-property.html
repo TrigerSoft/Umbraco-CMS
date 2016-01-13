@@ -2,12 +2,12 @@
     <ng-form name="propertyForm">
         <div class="control-group umb-control-group" ng-class="{hidelabel:property.hideLabel}" >
             
-            <val-property-msg property="property"></val-property-msg>
+            <!--<val-property-msg property="property"></val-property-msg>-->
             
             <div class="umb-el-wrap">
                 <label class="control-label" ng-hide="property.hideLabel" for="{{property.alias}}">
-                    {{property.label}}
-                    <small ng-bind-html="property.description"></small>
+                    {{property.label}}<span class="text-error" ng-if="property.validation.mandatory">*</span>&nbsp;&nbsp;<a ng-if="property.info" umb-popover data-html="true" tabindex="-1" role="button" data-toggle="popover" data-trigger="focus" data-content="{{property.info}}">[?]</a>
+                    <small umb-bind-html="property.description"></small>
                 </label>
 
                 <div class="controls controls-row" ng-transclude>
