@@ -110,7 +110,7 @@ angular.module('umbraco.mocks').
                                 },
                                 {
                                     label: 'Event Type',
-                                    description: 'type used for objects in this Event Hub',
+                                    description: 'type of objects in this Event Hub',
                                     info: "only types annotated with <strong>@role(event)</strong> are listed",
                                     value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
                                     view: "dropdown",
@@ -122,7 +122,7 @@ angular.module('umbraco.mocks').
                                 {
                                     label: 'Event Type Serialization Format',
                                     description: "which serialization format (JSON, CSV) you are using",
-                                    value: properties.format && properties.format.format,
+                                    value: (properties.format && properties.format.format) || "JSON",
                                     view: "dropdown",
                                     alias: "serializationFormat",
                                     config: {
@@ -245,14 +245,20 @@ angular.module('umbraco.mocks').
                                     description: "Blob's Container",
                                     value: properties.container,
                                     view: "textbox",
-                                    alias: "container"
+                                    alias: "container",
+                                    validation: {
+                                        mandatory: true
+                                    }
                                 },
                                 {
                                     label: 'Path',
                                     description: "Path to the Blob within container",
                                     value: properties.path,
                                     view: "textbox",
-                                    alias: "path"
+                                    alias: "path",
+                                    validation: {
+                                        mandatory: true
+                                    }
                                 },
                                 {
                                     label: 'Entry Point',
@@ -266,18 +272,8 @@ angular.module('umbraco.mocks').
                                     }
                                 },
                                 {
-                                    label: 'Event Type',
-                                    description: "only types annotated with <code>@role(event)</code> are listed",
-                                    value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
-                                    view: "dropdown",
-                                    alias: "factType",
-                                    config: {
-                                        items: factTypes
-                                    }
-                                },
-                                {
-                                    label: 'Event Type',
-                                    description: 'type used for objects in this Blob',
+                                    label: 'Blob Type',
+                                    description: 'type of objects in this Blob',
                                     value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
                                     view: "dropdown",
                                     alias: "factType",
@@ -288,7 +284,7 @@ angular.module('umbraco.mocks').
                                 {
                                     label: 'Blob Type Serialization Format',
                                     description: "which serialization format (JSON, CSV) you are using",
-                                    value: properties.format && properties.format.format,
+                                    value: (properties.format && properties.format.format) || "JSON",
                                     view: "dropdown",
                                     alias: "serializationFormat",
                                     config: {

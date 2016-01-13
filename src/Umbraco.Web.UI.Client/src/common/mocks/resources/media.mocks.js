@@ -93,12 +93,6 @@ angular.module('umbraco.mocks').
                 node.id = null;
                 node.parentId = parentId;
 
-                $(node.tabs).each(function (i, tab) {
-                    $(tab.properties).each(function (i, property) {
-                        property.value = "";
-                    });
-                });
-
                 return response;
             });
         }
