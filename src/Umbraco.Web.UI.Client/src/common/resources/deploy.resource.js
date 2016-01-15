@@ -1,5 +1,5 @@
 function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
-    var unitsItems = _.map(_.range(1, 24), function (value) {
+    var unitsItems = _.map(_.range(1, 33), function (value) {
         return { id: value, sortOrder: value, value: String(value) };
     });
     return {
