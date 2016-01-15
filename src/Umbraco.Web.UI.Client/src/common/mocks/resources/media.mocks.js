@@ -42,13 +42,14 @@ angular.module('umbraco.mocks').
         }
 
         var allInTypes = [
-            { name: "New Event Hub Input", description: "", parentId: "EventHub", alias: "EventHub", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" },
-            { name: "New Table Storage Input", description: "", parentId: "TableStorage", alias: "TableStorage", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" },
-            { name: "New Blob Storage Input", description: "", parentId: "BlobStorage", alias: "BlobStorage", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" }
+            { name: "New Event Hub Input", description: "Data stream - sequence of events to be consumed and transformed by a Stream Analytics job", parentId: "EventHub", alias: "EventHub", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" },
+            { name: "New Table Storage Input", description: "Reference data used for correlation and lookups", parentId: "TableStorage", alias: "TableStorage", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" },
+            { name: "New Blob Storage Input", description: "Reference data used for correlation and lookups", parentId: "BlobStorage", alias: "BlobStorage", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" }
         ];
 
         var allOutTypes = [
             { name: "New Event Hub Output", description: "", parentId: "EventHub", alias: "EventHub", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" },
+            { name: "New Service Bus (Queue or Topic) Output", description: "", parentId: "ServiceBus", alias: "ServiceBus", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" },
             { name: "New Table Storage Output", description: "", parentId: "TableStorage", alias: "TableStorage", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" },
             { name: "New Blob Storage Output", description: "", parentId: "BlobStorage", alias: "BlobStorage", id: 1, icon: "icon-document-dashed-line", thumbnail: "icon-document-dashed-line" }
         ];

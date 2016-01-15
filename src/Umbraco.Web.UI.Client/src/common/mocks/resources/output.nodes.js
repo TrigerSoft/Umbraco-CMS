@@ -19,6 +19,7 @@ angular.module('umbraco.mocks').
 								
 						case "EventHub":
 						case "BlobStorage":
+                        case "ServiceBus":
 							if (tableEntity)
 								return;
 								
@@ -55,42 +56,123 @@ angular.module('umbraco.mocks').
 							id: 0,
 							properties: [
 								{
-									label: 'Connection String',
-									description: "Click 'View Connection String' in the Event Hub dashboard. 'Listen' permission is required.",
-									value: properties.connectionString,
-									view: "textbox",
-									alias: "connectionString"
-								},
+                                    label: 'Connection String',
+                                    info: "Click 'Connection Information' or 'View Connection String' in the Event Hub dashboard. 'Send' permission is required.",
+                                    value: properties.connectionString,
+                                    view: "textbox",
+                                    alias: "connectionString",
+                                    validation: {
+                                        mandatory: true
+                                    }
+                                },
+                                {
+                                    label: 'Path',
+                                    description: "Name of the Event Hub",
+                                    value: properties.path,
+                                    view: "textbox",
+                                    alias: "path",
+                                    validation: {
+                                        mandatory: true
+                                    }
+                                },
+                                {
+                                    label: 'Fact Type',
+                                    description: 'type of objects to send to this Event Hub',
+                                    info: "<strong>insertLogical</strong> or <strong>insert</strong> an object of this type will send it to the Event Hub",
+                                    value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
+                                    view: "dropdown",
+                                    alias: "factType",
+                                    config: {
+                                        items: factTypes
+                                    }
+                                },
+                                {
+                                    label: 'Fact Type Serialization Format',
+                                    description: "which serialization format (JSON, CSV) to use",
+                                    value: (properties.format && properties.format.format) || "JSON",
+                                    view: "dropdown",
+                                    alias: "serializationFormat",
+                                    config: {
+                                        items: {
+                                            "JSON": "JSON",
+                                            "CSV": "CSV"
+                                        }
+                                    }
+                                }
+							]
+						}
+					]
+				};
+
+				return node;
+			});
+		}
+        
+        function _getServiceBusNode(id, properties, factTypes) {
+
+			return $.when(properties, factTypes).then(function (properties, factTypes) {
+				if (!properties)
+					properties = {};
+				var node = {
+					name: properties.name,
+					updateDate: new Date(),
+					publishDate: new Date(),
+					id: id,
+					parentId: "ServiceBus",
+					icon: "icon-file-alt",
+					owner: { name: "Administrator", id: 0 },
+					updater: { name: "Per Ploug Krogslund", id: 1 },
+					path: "-1," + id,
+					tabs: [
+						{
+							label: "Service Bus Output Settings",
+							alias: "tab0",
+							id: 0,
+							properties: [
 								{
-									label: 'Consumer Group',
-									description: "Event Hubs limit the number of readers within one consumer group (to 5). We recommend using a separate group for each job. Leaving this field empty will use the '$Default' consumer group.",
-									value: properties.consumerGroup,
-									view: "textbox",
-									alias: "consumerGroup"
-								},
-								{
-									label: 'Type',
-									description: "when an instance of this type is inserted, it will be sent to the Event Hub",
-									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
-									view: "dropdown",
-									alias: "factType",
-									config: {
-										items: factTypes
-									}
-								},
-								{
-									label: 'Event Type Serialization Format',
-									description: "which serialization format (JSON, CSV) you are using",
-									value: properties.format && properties.format.format,
-									view: "dropdown",
-									alias: "serializationFormat",
-									config: {
-										items: {
-											"JSON": "JSON",
-											"CSV": "CSV"
-										}
-									}
-								}
+                                    label: 'Connection String',
+                                    info: "Click 'Connection Information' or 'View Connection String' in the Service Bus dashboard. 'Send' permission is required.",
+                                    value: properties.connectionString,
+                                    view: "textbox",
+                                    alias: "connectionString",
+                                    validation: {
+                                        mandatory: true
+                                    }
+                                },
+                                {
+                                    label: 'Path',
+                                    description: "Name of the Queue or Topic",
+                                    value: properties.path,
+                                    view: "textbox",
+                                    alias: "path",
+                                    validation: {
+                                        mandatory: true
+                                    }
+                                },
+                                {
+                                    label: 'Fact Type',
+                                    description: 'type of objects to send to this Service Bus',
+                                    info: "<strong>insertLogical</strong> or <strong>insert</strong> an object of this type will send it to the Service Bus",
+                                    value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
+                                    view: "dropdown",
+                                    alias: "factType",
+                                    config: {
+                                        items: factTypes
+                                    }
+                                },
+                                {
+                                    label: 'Fact Type Serialization Format',
+                                    description: "which serialization format (JSON, CSV) to use",
+                                    value: (properties.format && properties.format.format) || "JSON",
+                                    view: "dropdown",
+                                    alias: "serializationFormat",
+                                    config: {
+                                        items: {
+                                            "JSON": "JSON",
+                                            "CSV": "CSV"
+                                        }
+                                    }
+                                }
 							]
 						}
 					]
@@ -122,22 +204,27 @@ angular.module('umbraco.mocks').
 							id: 0,
 							properties: [
 								{
-									label: 'Connection String',
-									description: "Click 'View Connection String' in the Event Hub dashboard. 'Listen' permission is required.",
-									value: properties.connectionString,
-									view: "textbox",
-									alias: "connectionString"
-								},
+                                    label: 'Connection String',
+                                    value: properties.connectionString,
+                                    view: "textbox",
+                                    alias: "connectionString",
+                                    validation: {
+                                        mandatory: true
+                                    }
+                                },
+                                {
+                                    label: 'Table Name',
+                                    value: properties.table,
+                                    view: "textbox",
+                                    alias: "table",
+                                    validation: {
+                                        mandatory: true
+                                    }
+                                },
 								{
-									label: 'Table Name',
-									description: "Table Name.",
-									value: properties.table,
-									view: "textbox",
-									alias: "table"
-								},
-								{
-									label: 'Type',
-									description: "when an instance of this type is inserted, it will be upserted to the Table",
+									label: 'Fact Type',
+									description: 'type of objects to upsert to this Table',
+                                    info: "<strong>insertLogical</strong> or <strong>insert</strong> an object of this type will <em>upsert</em> it to the Table",
 									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
 									view: "dropdown",
 									alias: "factType",
@@ -176,49 +263,58 @@ angular.module('umbraco.mocks').
 							id: 0,
 							properties: [
 								{
-									label: 'Connection String',
-									description: "Click 'View Connection String' in the Event Hub dashboard. 'Listen' permission is required.",
-									value: properties.connectionString,
-									view: "textbox",
-									alias: "connectionString"
-								},
+                                    label: 'Connection String',
+                                    value: properties.connectionString,
+                                    view: "textbox",
+                                    alias: "connectionString",
+                                    validation: {
+                                        mandatory: true
+                                    }
+                                },
+                                {
+                                    label: 'Container Name',
+                                    description: "Blob's Container",
+                                    value: properties.container,
+                                    view: "textbox",
+                                    alias: "container",
+                                    validation: {
+                                        mandatory: true
+                                    }
+                                },
+                                {
+                                    label: 'Path',
+                                    description: "Path to the Blob within container",
+                                    value: properties.path,
+                                    view: "textbox",
+                                    alias: "path",
+                                    validation: {
+                                        mandatory: true
+                                    }
+                                },
 								{
-									label: 'Container Name',
-									description: "Blob's Container.",
-									value: properties.container,
-									view: "textbox",
-									alias: "container"
-								},
-								{
-									label: 'Path',
-									description: "Path to the Blob within container.",
-									value: properties.path,
-									view: "textbox",
-									alias: "path"
-								},
-								{
-									label: 'Type',
-									description: "when an instance of this type is inserted, it will be appended to the Blob",
-									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
-									view: "dropdown",
-									alias: "factType",
-									config: {
-										items: factTypes
-									}
-								},
-								{
-									label: 'Event Type Serialization Format',
-									description: "which serialization format (JSON, CSV) you are using",
-									value: properties.format && properties.format.format,
-									view: "dropdown",
-									alias: "serializationFormat",
-									config: {
-										items: {
-											"JSON": "JSON",
-											"CSV": "CSV"
-										}
-									}
-								}
+                                    label: 'Fact Type',
+                                    description: 'type of objects to append to this Blob',
+                                    info: "<strong>insertLogical</strong> or <strong>insert</strong> of this type of object in the rule will append it to the Blob. Objects are line separated",
+                                    value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
+                                    view: "dropdown",
+                                    alias: "factType",
+                                    config: {
+                                        items: factTypes
+                                    }
+                                },
+                                {
+                                    label: 'Fact Type Serialization Format',
+                                    description: "which serialization format (JSON, CSV) to use",
+                                    value: (properties.format && properties.format.format) || "JSON",
+                                    view: "dropdown",
+                                    alias: "serializationFormat",
+                                    config: {
+                                        items: {
+                                            "JSON": "JSON",
+                                            "CSV": "CSV"
+                                        }
+                                    }
+                                }
 							]
 						}
 					]
@@ -242,6 +338,10 @@ angular.module('umbraco.mocks').
 
 					case "BlobStorage":
 						getNode = _getBlobStorageNode;
+						break;
+                        
+                    case "ServiceBus":
+						getNode = _getServiceBusNode;
 						break;
 				}
 

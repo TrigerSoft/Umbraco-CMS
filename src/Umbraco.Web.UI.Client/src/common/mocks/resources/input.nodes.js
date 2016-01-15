@@ -109,7 +109,7 @@ angular.module('umbraco.mocks').
                                     }
                                 },
                                 {
-                                    label: 'Event Type',
+                                    label: 'Fact Type',
                                     description: 'type of objects in this Event Hub',
                                     info: "only types annotated with <strong>@role(event)</strong> are listed",
                                     value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
@@ -120,7 +120,7 @@ angular.module('umbraco.mocks').
                                     }
                                 },
                                 {
-                                    label: 'Event Type Serialization Format',
+                                    label: 'Fact Type Serialization Format',
                                     description: "which serialization format (JSON, CSV) you are using",
                                     value: (properties.format && properties.format.format) || "JSON",
                                     view: "dropdown",
@@ -195,7 +195,17 @@ angular.module('umbraco.mocks').
                                     config: {
                                         items: entryPoints
                                     }
-                                }
+                                },
+								{
+									label: 'Fact Type',
+									description: "type of objects in this Table",
+									value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
+									view: "dropdown",
+									alias: "factType",
+									config: {
+										items: factTypes
+									}
+								}
                             ]
                         }
                     ]
@@ -272,7 +282,7 @@ angular.module('umbraco.mocks').
                                     }
                                 },
                                 {
-                                    label: 'Blob Type',
+                                    label: 'Fact Type',
                                     description: 'type of objects in this Blob',
                                     value: properties.factType && mocksUtils.fullNameFromFactType(properties.factType),
                                     view: "dropdown",
@@ -282,7 +292,7 @@ angular.module('umbraco.mocks').
                                     }
                                 },
                                 {
-                                    label: 'Blob Type Serialization Format',
+                                    label: 'Fact Type Serialization Format',
                                     description: "which serialization format (JSON, CSV) you are using",
                                     value: (properties.format && properties.format.format) || "JSON",
                                     view: "dropdown",
