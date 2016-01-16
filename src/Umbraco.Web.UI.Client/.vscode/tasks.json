@@ -15,6 +15,17 @@
             ]
         },
         {
+            "taskName": "build",
+            "args": ["--minify=true"],
+            "isBuildCommand": false,
+            "isWatching": false,
+            "problemMatcher": [
+                "$lessCompile",
+                "$tsc",
+                "$jshint"
+            ]
+        },
+        {
             "taskName": "watch-test",
             "args": [],
             "isTestCommand": true

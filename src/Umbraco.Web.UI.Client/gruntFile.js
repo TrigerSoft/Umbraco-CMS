@@ -18,10 +18,10 @@ module.exports = function (grunt) {
     grunt.registerTask('watch-test', ['jshint:dev', 'karma:unit']);
 
     //triggered from grunt dev or grunt
-    grunt.registerTask('build', ['clean:pre', 'concat', 'recess:min', 'recess:installer', 'recess:canvasdesigner', 'bower-install-simple', 'bower', 'copy', 'clean:post']);
+    grunt.registerTask('build', ['clean:pre', 'concat', 'recess:min', 'recess:installer', 'bower-install-simple', 'bower', 'sync', 'concat:loader', 'uglify']);
 
     //build-dev doesn't min - we are trying to speed this up and we don't want minified stuff when we are in dev mode
-    grunt.registerTask('build-dev', ['concat', 'recess:build', 'recess:installer', 'bower-install-simple', 'bower', 'sync']);
+    grunt.registerTask('build-dev', ['concat', 'recess:build', 'recess:installer', 'bower-install-simple', 'bower', 'sync', 'concat:loader']);
 
     //utillity tasks
     grunt.registerTask('docs', ['ngdocs']);
@@ -36,6 +36,7 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '7',
+        minify: grunt.option('minify'), //--minify=true
         connect: {
             devserver: {
                 options: {
@@ -122,20 +123,20 @@ module.exports = function (grunt) {
                 files: [{ dest: '<%= distdir %>/../config', src: '**', expand: true, cwd: 'src/config/' }]
             },
 
-            installer: {
-                files: [{ dest: '<%= distdir %>/views/install', src: '**/*.html', expand: true, cwd: 'src/installer/steps' }]
-            },
+            // installer: {
+            //     files: [{ dest: '<%= distdir %>/views/install', src: '**/*.html', expand: true, cwd: 'src/installer/steps' }]
+            // },
 
-            canvasdesigner: {
-                files: [
-                    { dest: '<%= distdir %>/preview', src: '**/*.html', expand: true, cwd: 'src/canvasdesigner' },
-                    { dest: '<%= distdir %>/preview/editors', src: '**/*.html', expand: true, cwd: 'src/canvasdesigner/editors' },
-                    { dest: '<%= distdir %>/assets/less', src: '**/*.less', expand: true, cwd: 'src/canvasdesigner/editors' },
-                    { dest: '<%= distdir %>/js', src: 'canvasdesigner.config.js', expand: true, cwd: 'src/canvasdesigner/config' },
-                    { dest: '<%= distdir %>/js', src: 'canvasdesigner.palettes.js', expand: true, cwd: 'src/canvasdesigner/config' },
-                    { dest: '<%= distdir %>/js', src: 'canvasdesigner.front.js', expand: true, cwd: 'src/canvasdesigner' }
-                ]
-            },
+            // canvasdesigner: {
+            //     files: [
+            //         { dest: '<%= distdir %>/preview', src: '**/*.html', expand: true, cwd: 'src/canvasdesigner' },
+            //         { dest: '<%= distdir %>/preview/editors', src: '**/*.html', expand: true, cwd: 'src/canvasdesigner/editors' },
+            //         { dest: '<%= distdir %>/assets/less', src: '**/*.less', expand: true, cwd: 'src/canvasdesigner/editors' },
+            //         { dest: '<%= distdir %>/js', src: 'canvasdesigner.config.js', expand: true, cwd: 'src/canvasdesigner/config' },
+            //         { dest: '<%= distdir %>/js', src: 'canvasdesigner.palettes.js', expand: true, cwd: 'src/canvasdesigner/config' },
+            //         { dest: '<%= distdir %>/js', src: 'canvasdesigner.front.js', expand: true, cwd: 'src/canvasdesigner' }
+            //     ]
+            // },
 
             vendor: {
                 files: [{ dest: '<%= distdir %>/lib', src: '**', expand: true, cwd: 'lib/' }]
@@ -178,6 +179,13 @@ module.exports = function (grunt) {
                     process: true
                 }
             },
+            loader: {
+                src: ['src/loader.dev.js'],
+                dest: '<%= distdir %>/js/loader.dev.js',
+                options: {
+                    process: true
+                }
+            },
             install: {
                 src: ['src/installer/installer.html'],
                 dest: '<%= distdir %>/installer.html',
@@ -186,18 +194,18 @@ module.exports = function (grunt) {
                 }
             },
 
-            installJs: {
-                src: ['src/installer/**/*.js'],
-                dest: '<%= distdir %>/js/umbraco.installer.js',
-                options: {
-                    banner: "<%= banner %>\n(function() { \n\n angular.module('umbraco.install', []); \n",
-                    footer: "\n\n})();"
-                }
-            },
-            canvasdesignerJs: {
-                src: ['src/canvasdesigner/canvasdesigner.global.js', 'src/canvasdesigner/canvasdesigner.controller.js', 'src/canvasdesigner/editors/*.js', 'src/canvasdesigner/lib/*.js'],
-                dest: '<%= distdir %>/js/canvasdesigner.panel.js'
-            },
+            // installJs: {
+            //     src: ['src/installer/**/*.js'],
+            //     dest: '<%= distdir %>/js/umbraco.installer.js',
+            //     options: {
+            //         banner: "<%= banner %>\n(function() { \n\n angular.module('umbraco.install', []); \n",
+            //         footer: "\n\n})();"
+            //     }
+            // },
+            // canvasdesignerJs: {
+            //     src: ['src/canvasdesigner/canvasdesigner.global.js', 'src/canvasdesigner/canvasdesigner.controller.js', 'src/canvasdesigner/editors/*.js', 'src/canvasdesigner/lib/*.js'],
+            //     dest: '<%= distdir %>/js/canvasdesigner.panel.js'
+            // },
             controllers: {
                 src: ['src/controllers/**/*.controller.js', 'src/views/**/*.controller.js'],
                 dest: '<%= distdir %>/js/umbraco.controllers.js',
@@ -258,7 +266,7 @@ module.exports = function (grunt) {
 
         uglify: {
             options: {
-                mangle: true
+               mangle: false
             },
             combine: {
                 files: {
