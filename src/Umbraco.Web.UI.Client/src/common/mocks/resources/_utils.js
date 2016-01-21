@@ -5,7 +5,7 @@ angular.module('umbraco.mocks').
         //by default we will perform authorization
         var doAuth = true;
         var _compilation = null;
-        var remoteBaseUrl = "http://localhost:39246/configuration/dev/";
+        var remoteBaseUrl = API_BASE_URL;
         
         var compile = function() {
             return $.ajax({

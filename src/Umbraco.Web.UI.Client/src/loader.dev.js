@@ -1,3 +1,5 @@
+var API_BASE_URL = '<%=  apibaseurl%>';
+
 (function() {
 
 var deps = [
@@ -54,7 +56,7 @@ var deps = [
   
   var min = '<%=  minify%>';
   
-  deps.splice.apply(deps, [-2, 0].concat(min ? umbMinDeps : umbFullDeps));
+  deps.push.apply(deps, (min ? umbMinDeps : umbFullDeps));
 
 LazyLoad.js(
     deps,

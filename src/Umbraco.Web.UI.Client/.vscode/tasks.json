@@ -5,7 +5,7 @@
     "tasks": [
         {
             "taskName": "build-dev",
-            "args": [],
+            "args": ["--apibaseurl=http://localhost:39246/configuration/dev/"],
             "isBuildCommand": true,
             "isWatching": false,
             "problemMatcher": [
@@ -16,7 +16,7 @@
         },
         {
             "taskName": "build",
-            "args": ["--minify=true"],
+            "args": ["--minify=true", "--apibaseurl=../../configuration/dev/"],
             "isBuildCommand": false,
             "isWatching": false,
             "problemMatcher": [

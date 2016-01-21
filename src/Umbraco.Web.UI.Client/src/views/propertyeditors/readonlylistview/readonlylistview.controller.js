@@ -192,6 +192,7 @@ function readOnlyListViewController($scope, $injector) {
         }
         if (runId) {
             $scope.listViewResultSet = null;
+            $scope.pagination = [];
             unsubscribe = contentResource.pollChildren($scope, "add-results", config.contentId, runId)
         }
     }

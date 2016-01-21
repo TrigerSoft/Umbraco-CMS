@@ -36,7 +36,8 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '7',
-        minify: grunt.option('minify'), //--minify=true
+        minify: grunt.option('minify'), //see tasks.json
+        apibaseurl: grunt.option('apibaseurl'),
         connect: {
             devserver: {
                 options: {

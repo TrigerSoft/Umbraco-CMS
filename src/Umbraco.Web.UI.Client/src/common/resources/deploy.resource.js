@@ -186,7 +186,9 @@ function runResource($q, $http, umbDataFormatter, umbRequestHelper) {
                         "Test",
                         [
                             { seconds: seconds }
-                        ]));
+                        ])).then(function(r) {
+                            return r.data;
+                        });
         }
     };
 }
